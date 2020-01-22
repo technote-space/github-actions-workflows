@@ -20,13 +20,16 @@ jobs:
             cp -f ${{ env.GITHUB_WORKSPACE }}/.github/workflows/sync-workflows.yml ${{ env.GITHUB_WORKSPACE }}/.github/workflows/.tmp/ > /dev/null 2>&1 || :
             rm -f ${{ env.GITHUB_WORKSPACE }}/.github/workflows/*.yml
             git clone --depth=1 https://github.com/technote-space/github-actions-workflows.git ${{ env.GITHUB_WORKSPACE }}/.github/workflows/.tmp/workflows
-            cp ${{ env.GITHUB_WORKSPACE }}/.github/workflows/.tmp/workflows/base/*.yml ${{ env.GITHUB_WORKSPACE }}/.github/workflows/
+            cp ${{ env.GITHUB_WORKSPACE }}/.github/workflows/.tmp/workflows/js-repo/*.yml ${{ env.GITHUB_WORKSPACE }}/.github/workflows/
+#            cp ${{ env.GITHUB_WORKSPACE }}/.github/workflows/.tmp/workflows/ts-repo/*.yml ${{ env.GITHUB_WORKSPACE }}/.github/workflows/
+#            cp ${{ env.GITHUB_WORKSPACE }}/.github/workflows/.tmp/workflows/wp-plugin1/*.yml ${{ env.GITHUB_WORKSPACE }}/.github/workflows/
+#            cp ${{ env.GITHUB_WORKSPACE }}/.github/workflows/.tmp/workflows/wp-plugin2/*.yml ${{ env.GITHUB_WORKSPACE }}/.github/workflows/
+#            cp ${{ env.GITHUB_WORKSPACE }}/.github/workflows/.tmp/workflows/wp-plugin3/*.yml ${{ env.GITHUB_WORKSPACE }}/.github/workflows/
             cp -f ${{ env.GITHUB_WORKSPACE }}/.github/workflows/.tmp/sync-workflows.yml ${{ env.GITHUB_WORKSPACE }}/.github/workflows/sync-workflows.yml > /dev/null 2>&1 || :
+#            sed -i 's/cron:.\+$/cron: 0 17 * * */' ${{ env.GITHUB_WORKSPACE }}/.github/workflows/update-dependencies.yml
             rm -rdf ${{ env.GITHUB_WORKSPACE }}/.github/workflows/.tmp
-          COMMIT_MESSAGE: 'feat: sync workflows'
-          PR_BRANCH_NAME: 'feat-sync-workflows-${PR_ID}'
-          PR_TITLE: 'feat: sync workflows (${PR_MERGE_REF})'
-          PR_DEFAULT_BRANCH_PREFIX: release/
-          PR_DEFAULT_BRANCH_NAME: ${PATCH_VERSION}
-          PR_DEFAULT_BRANCH_TITLE: release/${PATCH_VERSION}
-          TARGET_BRANCH_PREFIX: release/
+          COMMIT_MESSAGE: 'chore: sync workflows'
+          PR_BRANCH_PREFIX: chore/
+          PR_BRANCH_NAME: 'chore-sync-workflows-${PR_ID}'
+          PR_TITLE: 'chore: sync workflows (${PR_MERGE_REF})'
+          ONLY_DEFAULT_BRANCH: true
