@@ -3,6 +3,8 @@ on:
     - cron: 0 17 * * 6
   pull_request:
     types: [opened, synchronize, reopened, closed]
+  repository_dispatch:
+    types: [update-deps]
 
 name: Update dependencies
 
