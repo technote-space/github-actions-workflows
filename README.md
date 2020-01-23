@@ -1,6 +1,6 @@
 # GitHub Actions workflows
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://github.com/technote-space/filter-github-action/blob/master/LICENSE)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://github.com/technote-space/github-actions-workflows/blob/master/LICENSE)
 
 GitHub Actions workflows.
 

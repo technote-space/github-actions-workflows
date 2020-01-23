@@ -1,7 +1,7 @@
 # Contributing
-[issues]: https://github.com/technote-space/filter-github-action/issues
-[fork]: https://github.com/technote-space/filter-github-action/fork
-[pr]: https://github.com/technote-space/filter-github-action/compare
+[issues]: https://github.com/technote-space/github-actions-workflows/issues
+[fork]: https://github.com/technote-space/github-actions-workflows/fork
+[pr]: https://github.com/technote-space/github-actions-workflows/compare
 [eslint]: https://eslint.org/
 [jest]: https://jestjs.io/
 [code-of-conduct]: CODE_OF_CONDUCT.md
