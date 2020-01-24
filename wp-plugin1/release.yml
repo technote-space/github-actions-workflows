@@ -2,6 +2,8 @@ on:
   push:
     tags:
       - 'v*'
+  repository_dispatch:
+    types: [release]
 
 name: Release
 
@@ -49,8 +51,9 @@ jobs:
           git clone --depth=1 https://github.com/wp-content-framework/travis-ci.git travis-ci
           bash travis-ci/bin/deploy/gh-pages.sh
         env:
+          TRAVIS_BUILD_DIR: ${{ github.workspace }}
           GH_PAGES_PLUGIN_SCRIPT: ./index.min.js
-          GH_PAGES_TITLE: Add RichText Toolbar Button
+          GH_PAGES_TITLE:
           GH_PAGES_TEMPLATE: gutenberg
           GH_PAGES_TRACKING_ID: UA-78163306-3
       - name: Deploy
@@ -71,6 +74,7 @@ jobs:
     name: Upload build files
     needs: test
     runs-on: ubuntu-latest
+    if: github.event_name != 'repository_dispatch'
     steps:
       - name: Checkout
         uses: actions/checkout@v1
