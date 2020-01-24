@@ -23,6 +23,7 @@ jobs:
             git clone --depth=1 https://github.com/technote-space/github-actions-workflows.git .github/workflows/.tmp/workflows
 #            cp .github/workflows/.tmp/workflows/gh-actions/*.yml .github/workflows/
 #            cp .github/workflows/.tmp/workflows/js-repo/*.yml .github/workflows/
+#            cp .github/workflows/.tmp/workflows/js-repo-pages/*.yml .github/workflows/
             cp .github/workflows/.tmp/workflows/ts-repo/*.yml .github/workflows/
 #            cp .github/workflows/.tmp/workflows/wp-plugin1/*.yml .github/workflows/
 #            cp .github/workflows/.tmp/workflows/wp-plugin2/*.yml .github/workflows/
