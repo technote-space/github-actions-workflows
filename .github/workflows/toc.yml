@@ -1,6 +1,4 @@
-on:
-  pull_request:
-    types: [opened, synchronize, reopened, closed]
+on: push
 
 name: TOC Generator
 
