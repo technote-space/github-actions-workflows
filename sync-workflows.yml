@@ -28,6 +28,7 @@ jobs:
 #            bash .github/workflows/.tmp/workflows/wp-plugin/copy.sh [releases, test-releases, test-pages-releases] [php-js-lint, php-js-test, php-lint, php-test]
 
 #            sed -i 's/cron:.\+$/cron: 0 17 * * */' .github/workflows/update-dependencies.yml
+#            sed -i 's/cron:.\+$/cron: 0 9 * * 1/' .github/workflows/update-dependencies.yml
 
             rm -rdf .github/workflows/.tmp
           COMMIT_MESSAGE: 'chore: sync workflows'
