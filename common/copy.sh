@@ -2,8 +2,8 @@
 
 set -e
 
-current=$(cd "$(dirname "$0")"; pwd)
-tmp="${current}"/.tmp
+readonly current=$(cd "$(dirname "$0")"; pwd)
+readonly tmp="${current}"/.tmp
 
 mkdir -p "${tmp}"
 cp -f "${GITHUB_WORKSPACE}"/.github/workflows/sync-workflows.yml "${tmp}"/ > /dev/null 2>&1 || :
