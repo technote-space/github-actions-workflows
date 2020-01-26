@@ -21,7 +21,8 @@ jobs:
             git clone --depth=1 https://github.com/technote-space/github-actions-workflows.git .github/workflows/.tmp/workflows
 
             bash .github/workflows/.tmp/workflows/common/copy.sh
-            sed -i '2i \ \ push:' .github/workflows/toc.yml
+            sed -i '1,3d' .github/workflows/toc.yml
+            sed -i '1i on: push' .github/workflows/toc.yml
 
             rm -rdf .github/workflows/.tmp
           COMMIT_MESSAGE: 'chore: sync workflows'
