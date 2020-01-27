@@ -88,7 +88,7 @@ jobs:
           npm publish
         env:
           NPM_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
-        if: matrix.target == 'npm' && secrets.NPM_AUTH_TOKEN
+        if: matrix.target == 'npm' && env.NPM_AUTH_TOKEN
       - name: Publish
         run: npm publish
         env:
