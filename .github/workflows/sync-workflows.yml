@@ -23,6 +23,7 @@ jobs:
             bash .github/workflows/.tmp/workflows/common/copy.sh
             sed -i '1,3d' .github/workflows/toc.yml
             sed -i '1i on: push' .github/workflows/toc.yml
+            sed -i '/TARGET_BRANCH_PREFIX/d' .github/workflows/toc.yml
 
             rm -rdf .github/workflows/.tmp
           COMMIT_MESSAGE: 'chore: sync workflows'
