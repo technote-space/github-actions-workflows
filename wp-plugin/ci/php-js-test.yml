@@ -17,7 +17,7 @@ jobs:
     name: ESLint
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v1
+      - uses: actions/checkout@v2
         with:
           fetch-depth: 3
       - name: Prepare setting
@@ -35,7 +35,7 @@ jobs:
     name: PHP Code Sniffer
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v1
+      - uses: actions/checkout@v2
         with:
           fetch-depth: 3
       - name: Prepare setting
@@ -53,7 +53,7 @@ jobs:
     name: PHPMD
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v1
+      - uses: actions/checkout@v2
         with:
           fetch-depth: 3
       - name: Prepare setting
@@ -76,7 +76,7 @@ jobs:
       matrix:
         node: ['10', '11', '12']
     steps:
-      - uses: actions/checkout@v1
+      - uses: actions/checkout@v2
         with:
           fetch-depth: 3
       - name: Setup node
@@ -123,7 +123,7 @@ jobs:
             WP_MULTISITE: '1'
             ACTIVATE_POPULAR_PLUGINS: 1
     steps:
-      - uses: actions/checkout@v1
+      - uses: actions/checkout@v2
         with:
           fetch-depth: 3
       - name: Switch PHP version
