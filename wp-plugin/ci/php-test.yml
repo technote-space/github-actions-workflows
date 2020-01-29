@@ -146,6 +146,7 @@ jobs:
           WP_VERSION: ${{ matrix.WP_VERSION }}
           WP_MULTISITE: ${{ matrix.WP_MULTISITE }}
           ACTIVATE_POPULAR_PLUGINS: ${{ matrix.ACTIVATE_POPULAR_PLUGINS }}
+        if: env.GIT_DIFF || github.event_name == 'push'
       - name: Run tests
         run: bash travis-ci/bin/php/wp-test.sh
         env:
@@ -153,6 +154,7 @@ jobs:
           WP_VERSION: ${{ matrix.WP_VERSION }}
           WP_MULTISITE: ${{ matrix.WP_MULTISITE }}
           ACTIVATE_POPULAR_PLUGINS: ${{ matrix.ACTIVATE_POPULAR_PLUGINS }}
+        if: env.GIT_DIFF || github.event_name == 'push'
       - name: Codecov
         run: |
           if [ -n "$CODECOV_TOKEN" ]; then
@@ -161,7 +163,7 @@ jobs:
         env:
           CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
           COVERAGE_FILE: ./coverage/clover.xml
-        if: matrix.ACTIVATE_POPULAR_PLUGINS == 1
+        if: matrix.ACTIVATE_POPULAR_PLUGINS == 1 && (env.GIT_DIFF || github.event_name == 'push')
       - uses: 8398a7/action-slack@v1
         with:
           type: failure
