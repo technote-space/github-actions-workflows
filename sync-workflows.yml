@@ -30,6 +30,17 @@ jobs:
 #            sed -i 's/cron:.\+$/cron: 0 17 * * */' .github/workflows/update-dependencies.yml
 #            sed -i 's/cron:.\+$/cron: 0 9 * * 1/' .github/workflows/update-dependencies.yml
 
+#            sed -i "s/WP_VERSION: \[.\+$/WP_VERSION: ['latest', '5.0', 'trunk']/" .github/workflows/ci.yml
+
+#            sed -i "s/target: \['npm', 'gpr'\]/target: ['npm']/" .github/workflows/release.yml
+#            sed -i "/GH_PAGES_PLUGIN_SCRIPT/d" .github/workflows/release.yml
+#            sed -i "/GH_PAGES_TEMPLATE/d" .github/workflows/release.yml
+#            sed -i "s/GH_PAGES_TITLE:.*$/GH_PAGES_TITLE: jQuery Marker Animation/" .github/workflows/release.yml
+
+#            sed -i '1,3d' .github/workflows/toc.yml
+#            sed -i '1i on: push' .github/workflows/toc.yml
+#            sed -i '/TARGET_BRANCH_PREFIX/d' .github/workflows/toc.yml
+
             rm -rdf .github/workflows/.tmp
           COMMIT_MESSAGE: 'chore: sync workflows'
           PR_BRANCH_PREFIX: chore/
