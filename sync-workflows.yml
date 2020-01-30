@@ -40,6 +40,7 @@ jobs:
 #            sed -i '1,3d' .github/workflows/toc.yml
 #            sed -i '1i on: push' .github/workflows/toc.yml
 #            sed -i '/TARGET_BRANCH_PREFIX/d' .github/workflows/toc.yml
+#            sed -i "/ACTIVATE_POPULAR_PLUGINS: 1/a \        exclude:\n          - php: '7.3'\n            WP_VERSION: '4.6'" .github/workflows/ci.yml
 
             rm -rdf .github/workflows/.tmp
           COMMIT_MESSAGE: 'chore: sync workflows'

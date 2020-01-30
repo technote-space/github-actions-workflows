@@ -32,7 +32,8 @@ jobs:
         run: |
           echo "::set-output name=dir::$(composer config cache-files-dir)"
         if: env.GIT_DIFF
-      - uses: actions/cache@v1
+      - name: Cache composer modules
+        uses: actions/cache@v1
         with:
           path: ${{ steps.composer-cache.outputs.dir }}
           key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
@@ -72,7 +73,8 @@ jobs:
         run: |
           echo "::set-output name=dir::$(composer config cache-files-dir)"
         if: env.GIT_DIFF
-      - uses: actions/cache@v1
+      - name: Cache composer modules
+        uses: actions/cache@v1
         with:
           path: ${{ steps.composer-cache.outputs.dir }}
           key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
@@ -130,7 +132,8 @@ jobs:
         run: |
           echo "::set-output name=dir::$(composer config cache-files-dir)"
         if: env.GIT_DIFF || github.event_name == 'push'
-      - uses: actions/cache@v1
+      - name: Cache composer modules
+        uses: actions/cache@v1
         with:
           path: ${{ steps.composer-cache.outputs.dir }}
           key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
