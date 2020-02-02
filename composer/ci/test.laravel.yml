@@ -1,0 +1,349 @@
+on:
+  pull_request:
+  push:
+    branches:
+      - master
+    tags:
+      - "!*"
+
+name: CI
+
+env:
+  CI: 1
+  WORKSPACE: ${{ github.workspace }}
+
+jobs:
+  eslint:
+    name: ESLint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 3
+      - uses: technote-space/get-diff-action@v1
+        with:
+          PREFIX_FILTER: |
+            resources/
+          SUFFIX_FILTER: |
+            .js
+            .ts
+            .vue
+          FILES: .eslintrc
+      - name: Get Yarn Cache Directory
+        id: yarn-cache
+        run: echo "::set-output name=dir::$(yarn cache dir)"
+        if: env.GIT_DIFF
+      - name: Cache node dependencies
+        uses: actions/cache@v1
+        with:
+          path: ${{ steps.yarn-cache.outputs.dir }}
+          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-yarn-
+        if: env.GIT_DIFF
+      - name: Check code style
+        run: bash composer bin:eslint
+        if: env.GIT_DIFF
+      - uses: 8398a7/action-slack@v1
+        with:
+          type: failure
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+        if: failure()
+  stylelint:
+    name: stylelint
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 3
+      - uses: technote-space/get-diff-action@v1
+        with:
+          PREFIX_FILTER: |
+            resources/
+          SUFFIX_FILTER: |
+            .scss
+            .css
+          FILES: .stylelintrc.json
+      - name: Get Yarn Cache Directory
+        id: yarn-cache
+        run: echo "::set-output name=dir::$(yarn cache dir)"
+        if: env.GIT_DIFF
+      - name: Cache node dependencies
+        uses: actions/cache@v1
+        with:
+          path: ${{ steps.yarn-cache.outputs.dir }}
+          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-yarn-
+        if: env.GIT_DIFF
+      - name: Check code style
+        run: bash composer bin:stylelint
+        if: env.GIT_DIFF
+      - uses: 8398a7/action-slack@v1
+        with:
+          type: failure
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+        if: failure()
+  phpcs:
+    name: PHP Code Sniffer
+    runs-on: ubuntu-latest
+    env:
+      LINT: 1
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 3
+      - uses: technote-space/get-diff-action@v1
+        with:
+          SUFFIX_FILTER: .php
+          FILES: phpcs.xml
+      - name: Get Composer Cache Directory
+        id: composer-cache
+        run: |
+          echo "::set-output name=dir::$(composer config cache-files-dir)"
+        if: env.GIT_DIFF
+      - uses: actions/cache@v1
+        with:
+          path: ${{ steps.composer-cache.outputs.dir }}
+          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-composer-
+        if: env.GIT_DIFF
+      - name: Check code style
+        run: bash composer bin:phpcs
+        if: env.GIT_DIFF
+      - uses: 8398a7/action-slack@v1
+        with:
+          type: failure
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+        if: failure()
+  phpmd:
+    name: PHPMD
+    runs-on: ubuntu-latest
+    env:
+      LINT: 1
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 3
+      - uses: technote-space/get-diff-action@v1
+        with:
+          SUFFIX_FILTER: .php
+          SEPARATOR: ','
+          FILES: phpmd.xml
+      - name: Get Composer Cache Directory
+        id: composer-cache
+        run: |
+          echo "::set-output name=dir::$(composer config cache-files-dir)"
+        if: env.GIT_DIFF
+      - uses: actions/cache@v1
+        with:
+          path: ${{ steps.composer-cache.outputs.dir }}
+          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-composer-
+        if: env.GIT_DIFF
+      - name: Check code style
+        run: bash composer bin:phpmd
+        if: env.GIT_DIFF
+      - uses: 8398a7/action-slack@v1
+        with:
+          type: failure
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+        if: failure()
+
+  jest:
+    name: Jest
+    needs: eslint
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node: ['10', '11', '12']
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 3
+      - uses: technote-space/get-diff-action@v1
+        with:
+          PREFIX_FILTER: |
+            resources/
+          SUFFIX_FILTER: |
+            .js
+            .ts
+            .vue
+          FILES: |
+            yarn.lock
+            jest.config.js
+      - name: Setup node
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node }}
+        if: env.GIT_DIFF || github.event_name == 'push'
+      - name: Get Yarn Cache Directory
+        id: yarn-cache
+        run: echo "::set-output name=dir::$(yarn cache dir)"
+        if: env.GIT_DIFF || github.event_name == 'push'
+      - name: Cache node dependencies
+        uses: actions/cache@v1
+        with:
+          path: ${{ steps.yarn-cache.outputs.dir }}
+          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-yarn-
+        if: env.GIT_DIFF || github.event_name == 'push'
+      - name: Run tests
+        run: bash composer bin:jest
+        if: env.GIT_DIFF || github.event_name == 'push'
+      - name: Codecov
+        run: |
+          if [ -n "$CODECOV_TOKEN" ]; then
+            curl -s https://codecov.io/bash | bash -s -- -t $CODECOV_TOKEN -f $COVERAGE_FILE
+          fi
+        env:
+          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+          COVERAGE_FILE: ./coverage/js/clover.xml
+        if: matrix.node == '12' && (env.GIT_DIFF || github.event_name == 'push')
+      - uses: 8398a7/action-slack@v1
+        with:
+          type: failure
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+        if: failure()
+  phpunit:
+    name: PHPUnit
+    needs: [phpcs, phpmd]
+    runs-on: ubuntu-latest
+    services:
+      mysql:
+        image: mysql
+        ports:
+          - 3306
+    strategy:
+      matrix:
+        php: ['7.2', '7.3']
+        include:
+          - php: '7.3'
+            SEND_CODECOV: 1
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 3
+      - uses: technote-space/get-diff-action@v1
+        with:
+          SUFFIX_FILTER: .php
+          FILES: composer.lock
+      - name: Switch PHP version
+        env:
+          PHP_VERSION: ${{ matrix.php }}
+        run: sudo ln -sf "/usr/bin/php$PHP_VERSION" /etc/alternatives/php
+        if: env.GIT_DIFF || github.event_name == 'push'
+      - name: Get Composer Cache Directory
+        id: composer-cache
+        run: |
+          echo "::set-output name=dir::$(composer config cache-files-dir)"
+        if: env.GIT_DIFF || github.event_name == 'push'
+      - name: Cache composer modules
+        uses: actions/cache@v1
+        with:
+          path: ${{ steps.composer-cache.outputs.dir }}
+          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-composer-
+        if: env.GIT_DIFF || github.event_name == 'push'
+      - name: Run tests
+        run: bash composer bin:phpunit
+        if: env.GIT_DIFF || github.event_name == 'push'
+      - name: Codecov
+        run: |
+          if [ -n "$CODECOV_TOKEN" ]; then
+            curl -s https://codecov.io/bash | bash -s -- -t $CODECOV_TOKEN -f $COVERAGE_FILE
+          fi
+        env:
+          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+          COVERAGE_FILE: ./coverage/clover.xml
+        if: matrix.SEND_CODECOV == 1 && (env.GIT_DIFF || github.event_name == 'push')
+      - uses: 8398a7/action-slack@v1
+        with:
+          type: failure
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+        if: failure()
+  dusk:
+    name: Laravel Dusk
+    needs: [phpcs, phpmd]
+    runs-on: ubuntu-latest
+    services:
+      mysql:
+        image: mysql
+        ports:
+          - 3306
+    strategy:
+      matrix:
+        php: ['7.2', '7.3']
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 3
+      - uses: technote-space/get-diff-action@v1
+        with:
+          SUFFIX_FILTER: .php
+          FILES: composer.lock
+      - name: Switch PHP version
+        env:
+          PHP_VERSION: ${{ matrix.php }}
+        run: sudo ln -sf "/usr/bin/php$PHP_VERSION" /etc/alternatives/php
+        if: env.GIT_DIFF || github.event_name == 'push'
+      - name: Get Composer Cache Directory
+        id: composer-cache
+        run: |
+          echo "::set-output name=dir::$(composer config cache-files-dir)"
+        if: env.GIT_DIFF || github.event_name == 'push'
+      - name: Cache composer modules
+        uses: actions/cache@v1
+        with:
+          path: ${{ steps.composer-cache.outputs.dir }}
+          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-composer-
+        if: env.GIT_DIFF || github.event_name == 'push'
+      - name: Run tests
+        run: bash composer bin:dusk
+        if: env.GIT_DIFF || github.event_name == 'push'
+      - uses: actions/upload-artifact@v1
+        with:
+          name: screenshots
+          path: tests/Browser/screenshots
+        if: env.GIT_DIFF || github.event_name == 'push'
+      - uses: 8398a7/action-slack@v1
+        with:
+          type: failure
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+        if: failure()
+
+  slack:
+    name: Slack
+    needs: [stylelint, jest, phpunit, dusk]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: 8398a7/action-slack@v1
+        with:
+          type: success
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
