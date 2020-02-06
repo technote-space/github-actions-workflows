@@ -20,8 +20,7 @@ jobs:
       LINT: 1
     steps:
       - uses: actions/checkout@v2
-        with:
-          fetch-depth: 3
+      - uses: technote-space/get-git-comment-action@v1
       - uses: technote-space/get-diff-action@v1
         with:
           PREFIX_FILTER: |
@@ -29,6 +28,7 @@ jobs:
             src/
             tests/
           SUFFIX_FILTER: .php
+        if: "! contains(env.COMMIT_MESSAGE, '[skip ci]') && ! contains(env.COMMIT_MESSAGE, '[ci skip]')"
       - name: Get Composer Cache Directory
         id: composer-cache
         run: |
@@ -62,8 +62,7 @@ jobs:
       LINT: 1
     steps:
       - uses: actions/checkout@v2
-        with:
-          fetch-depth: 3
+      - uses: technote-space/get-git-comment-action@v1
       - uses: technote-space/get-diff-action@v1
         with:
           PREFIX_FILTER: |
@@ -72,6 +71,7 @@ jobs:
             tests/
           SUFFIX_FILTER: .php
           SEPARATOR: ','
+        if: "! contains(env.COMMIT_MESSAGE, '[skip ci]') && ! contains(env.COMMIT_MESSAGE, '[ci skip]')"
       - name: Get Composer Cache Directory
         id: composer-cache
         run: |
@@ -116,8 +116,7 @@ jobs:
             SEND_CODECOV: 1
     steps:
       - uses: actions/checkout@v2
-        with:
-          fetch-depth: 3
+      - uses: technote-space/get-git-comment-action@v1
       - uses: technote-space/get-diff-action@v1
         with:
           PREFIX_FILTER: |
@@ -126,6 +125,7 @@ jobs:
             tests/
           SUFFIX_FILTER: .php
           FILES: composer.lock
+        if: "! contains(env.COMMIT_MESSAGE, '[skip ci]') && ! contains(env.COMMIT_MESSAGE, '[ci skip]')"
       - name: Switch PHP version
         env:
           PHP_VERSION: ${{ matrix.php }}
