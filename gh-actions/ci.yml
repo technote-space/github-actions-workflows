@@ -208,7 +208,7 @@ jobs:
         if: failure()
 
   publishRelease:
-    name: Draft Release
+    name: Create Release
     needs: [release, package]
     runs-on: ubuntu-latest
     steps:
@@ -216,7 +216,7 @@ jobs:
         run: echo "::set-env name=TAG_NAME::${HEAD_REF#refs/tags/}"
         env:
           HEAD_REF: ${{ github.ref }}
-      - name: Draft Release
+      - name: Create Release
         id: drafter
         uses: technote-space/release-drafter@v6
         with:
