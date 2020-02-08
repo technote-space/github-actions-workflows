@@ -17,7 +17,7 @@ jobs:
           HEAD_REF: ${{ github.ref }}
       - name: Create Release
         id: drafter
-        uses: technote-space/release-drafter@gh-actions
+        uses: technote-space/release-drafter@v6
         with:
           GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}
           DRAFT: false
