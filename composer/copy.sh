@@ -23,6 +23,6 @@ cp -f "${current}"/ci/"${1}".yml "${GITHUB_WORKSPACE}"/.github/workflows/ci.yml
 if [ $# -ge 2 ]; then
   cp -f "${current}"/release/"${2}".yml "${GITHUB_WORKSPACE}"/.github/workflows/release.yml
 fi
-rm -f "${GITHUB_WORKSPACE}"/.github/workflows/check_version.yml
+rm -f "${GITHUB_WORKSPACE}"/.github/workflows/check-version.yml
 
 rm -rdf "${tmp}"

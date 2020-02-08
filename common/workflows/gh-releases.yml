@@ -9,7 +9,6 @@ jobs:
   releases:
     name: Create Release
     runs-on: ubuntu-latest
-    if: startsWith(github.ref, 'refs/tags/')
     steps:
       - name: Get version
         run: echo "::set-env name=TAG_NAME::${HEAD_REF#refs/tags/}"

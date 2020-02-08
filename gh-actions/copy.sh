@@ -17,4 +17,6 @@ cp -f "${tmp}"/sync-workflows.yml "${GITHUB_WORKSPACE}"/.github/workflows/sync-w
 
 # shellcheck disable=SC2039
 find "${GITHUB_WORKSPACE}"/.github/workflows -maxdepth 1 -type f -name '*.yml' -print0 | xargs -0 readlink -f | while read -r file; do sed -i "s/uses: \(${GITHUB_REPOSITORY/\//\\/}\)@.\+$/uses: \1@gh-actions/" "$file"; done
+rm -f "${GITHUB_WORKSPACE}"/.github/workflows/gh-releases.yml
+
 rm -rdf "${tmp}"
