@@ -31,9 +31,9 @@ jobs:
         env:
           DB_PASS: root
           WP_VERSION: latest
-      - uses: 8398a7/action-slack@v1
+      - uses: 8398a7/action-slack@v2
         with:
-          type: failure
+          status: failure
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
@@ -66,9 +66,9 @@ jobs:
           ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
           BRANCH: gh-pages
           FOLDER: gh-pages
-      - uses: 8398a7/action-slack@v1
+      - uses: 8398a7/action-slack@v2
         with:
-          type: failure
+          status: failure
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
@@ -97,9 +97,9 @@ jobs:
           draft: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      - uses: 8398a7/action-slack@v1
+      - uses: 8398a7/action-slack@v2
         with:
-          type: failure
+          status: failure
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
@@ -110,9 +110,9 @@ jobs:
     needs: [pages, releases]
     runs-on: ubuntu-latest
     steps:
-      - uses: 8398a7/action-slack@v1
+      - uses: 8398a7/action-slack@v2
         with:
-          type: success
+          status: success
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}

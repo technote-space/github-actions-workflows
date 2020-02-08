@@ -44,9 +44,9 @@ jobs:
       - name: Check code style
         run: composer phpcs
         if: env.GIT_DIFF
-      - uses: 8398a7/action-slack@v1
+      - uses: 8398a7/action-slack@v2
         with:
-          type: failure
+          status: failure
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
@@ -83,9 +83,9 @@ jobs:
       - name: Check code style
         run: composer phpmd
         if: env.GIT_DIFF
-      - uses: 8398a7/action-slack@v1
+      - uses: 8398a7/action-slack@v2
         with:
-          type: failure
+          status: failure
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
@@ -96,9 +96,9 @@ jobs:
     needs: [phpcs, phpmd]
     runs-on: ubuntu-latest
     steps:
-      - uses: 8398a7/action-slack@v1
+      - uses: 8398a7/action-slack@v2
         with:
-          type: success
+          status: success
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}

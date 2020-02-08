@@ -55,9 +55,9 @@ jobs:
         run: |
           composer bin:jest
           composer bin:phpunit
-      - uses: 8398a7/action-slack@v1
+      - uses: 8398a7/action-slack@v2
         with:
-          type: failure
+          status: failure
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
@@ -95,9 +95,9 @@ jobs:
           ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
           BRANCH: gh-pages
           FOLDER: public/gh-pages
-      - uses: 8398a7/action-slack@v1
+      - uses: 8398a7/action-slack@v2
         with:
-          type: failure
+          status: failure
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
@@ -108,9 +108,9 @@ jobs:
     needs: [pages]
     runs-on: ubuntu-latest
     steps:
-      - uses: 8398a7/action-slack@v1
+      - uses: 8398a7/action-slack@v2
         with:
-          type: success
+          status: success
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
