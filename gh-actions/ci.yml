@@ -23,7 +23,7 @@ jobs:
         if: "! contains(env.COMMIT_MESSAGE, '[skip ci]') && ! contains(env.COMMIT_MESSAGE, '[ci skip]')"
       - name: Set running flag
         run: echo "::set-env name=RUNNING::0"
-        if: ! env.GIT_DIFF
+        if: "! env.GIT_DIFF"
 
       - name: Get Yarn Cache Directory
         id: yarn-cache
@@ -75,7 +75,7 @@ jobs:
         if: "! contains(env.COMMIT_MESSAGE, '[skip ci]') && ! contains(env.COMMIT_MESSAGE, '[ci skip]')"
       - name: Set running flag
         run: echo "::set-env name=RUNNING::0"
-        if: ! env.GIT_DIFF
+        if: "! env.GIT_DIFF"
       - name: Set running flag
         if: matrix.node == '12' && startsWith(github.ref, 'refs/tags/')
         run: echo "::set-env name=RUNNING::1"
