@@ -9,6 +9,8 @@ jobs:
     env:
       LINT: 1
     steps:
+      - name: Set running flag
+        run: echo "::set-env name=RUNNING::1"
       - uses: actions/checkout@v2
       - uses: technote-space/get-git-comment-action@v1
       - uses: technote-space/get-diff-action@v1
@@ -19,10 +21,14 @@ jobs:
           SUFFIX_FILTER: .ts
           FILES: .eslintrc
         if: "! contains(env.COMMIT_MESSAGE, '[skip ci]') && ! contains(env.COMMIT_MESSAGE, '[ci skip]')"
+      - name: Set running flag
+        run: echo "::set-env name=RUNNING::0"
+        if: ! env.GIT_DIFF
+
       - name: Get Yarn Cache Directory
         id: yarn-cache
         run: echo "::set-output name=dir::$(yarn cache dir)"
-        if: env.GIT_DIFF
+        if: env.RUNNING
       - name: Cache node dependencies
         uses: actions/cache@v1
         with:
@@ -30,13 +36,13 @@ jobs:
           key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
           restore-keys: |
             ${{ runner.os }}-yarn-
-        if: env.GIT_DIFF
+        if: env.RUNNING
       - name: Install Package dependencies
         run: yarn install
-        if: env.GIT_DIFF
+        if: env.RUNNING
       - name: Check code style
         run: yarn eslint ${{ env.GIT_DIFF }}
-        if: env.GIT_DIFF
+        if: env.RUNNING
       - uses: 8398a7/action-slack@v2
         with:
           status: failure
@@ -53,6 +59,8 @@ jobs:
       matrix:
         node: ['11', '12']
     steps:
+      - name: Set running flag
+        run: echo "::set-env name=RUNNING::1"
       - uses: actions/checkout@v2
       - uses: technote-space/get-git-comment-action@v1
       - uses: technote-space/get-diff-action@v1
@@ -65,18 +73,22 @@ jobs:
             yarn.lock
             jest.config.js
         if: "! contains(env.COMMIT_MESSAGE, '[skip ci]') && ! contains(env.COMMIT_MESSAGE, '[ci skip]')"
-      - name: Check must run
+      - name: Set running flag
+        run: echo "::set-env name=RUNNING::0"
+        if: ! env.GIT_DIFF
+      - name: Set running flag
         if: matrix.node == '12' && startsWith(github.ref, 'refs/tags/')
-        run: echo "::set-env name=GIT_DIFF::1"
+        run: echo "::set-env name=RUNNING::1"
+
       - name: Setup node
         uses: actions/setup-node@v1
         with:
           node-version: ${{ matrix.node }}
-        if: env.GIT_DIFF
+        if: env.RUNNING
       - name: Get Yarn Cache Directory
         id: yarn-cache
         run: echo "::set-output name=dir::$(yarn cache dir)"
-        if: env.GIT_DIFF
+        if: env.RUNNING
       - name: Cache node dependencies
         uses: actions/cache@v1
         with:
@@ -84,13 +96,13 @@ jobs:
           key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
           restore-keys: |
             ${{ runner.os }}-yarn-
-        if: env.GIT_DIFF
+        if: env.RUNNING
       - name: Install Package dependencies
         run: yarn install
-        if: env.GIT_DIFF
+        if: env.RUNNING
       - name: Run tests
         run: yarn cover
-        if: env.GIT_DIFF
+        if: env.RUNNING
       - name: Codecov
         run: |
           if [ -n "$CODECOV_TOKEN" ]; then
@@ -99,7 +111,7 @@ jobs:
         env:
           CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
           COVERAGE_FILE: ./coverage/lcov.info
-        if: env.GIT_DIFF && matrix.node == '12'
+        if: env.RUNNING && matrix.node == '12'
       - uses: 8398a7/action-slack@v2
         with:
           status: failure
@@ -125,6 +137,7 @@ jobs:
           key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
           restore-keys: |
             ${{ runner.os }}-yarn-
+
       - name: Release GitHub Actions
         uses: technote-space/release-github-actions@v3
         with:
@@ -173,6 +186,7 @@ jobs:
           key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
           restore-keys: |
             ${{ runner.os }}-yarn-
+
       - name: Check package version
         uses: technote-space/package-version-check-action@v1
         with:
