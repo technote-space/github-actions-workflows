@@ -139,8 +139,8 @@ jobs:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
         if: failure()
 
-  jest:
-    name: Jest
+  cover:
+    name: Coverage
     needs: eslint
     runs-on: ubuntu-latest
     strategy:
@@ -282,7 +282,7 @@ jobs:
 
   slack:
     name: Slack
-    needs: [jest, phpunit]
+    needs: [cover, phpunit]
     runs-on: ubuntu-latest
     steps:
       - uses: 8398a7/action-slack@v2
