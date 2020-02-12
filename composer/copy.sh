@@ -19,7 +19,6 @@ if [ "${1:-test}" = "test.php56" ]; then
 else
 	cp -f "${current}"/ci/test.yml "${GITHUB_WORKSPACE}"/.github/workflows/ci.yml
 fi
-rm -f "${GITHUB_WORKSPACE}"/.github/workflows/check-version.yml
 rm -f "${GITHUB_WORKSPACE}"/.github/workflows/gh-releases.yml
 
 rm -rdf "${tmp}"
