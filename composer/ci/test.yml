@@ -1,10 +1,4 @@
-on:
-  pull_request:
-  push:
-    branches:
-      - master
-    tags:
-      - "!*"
+on: push
 
 name: CI
 
@@ -20,6 +14,8 @@ jobs:
     env:
       LINT: 1
     steps:
+      - name: Set running flag
+        run: echo "::set-env name=RUNNING::1"
       - uses: actions/checkout@v2
       - uses: technote-space/get-git-comment-action@v1
       - uses: technote-space/get-diff-action@v1
@@ -27,11 +23,15 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SUFFIX_FILTER: .php
         if: "! contains(env.COMMIT_MESSAGE, '[skip ci]') && ! contains(env.COMMIT_MESSAGE, '[ci skip]')"
+      - name: Set running flag
+        run: echo "::set-env name=RUNNING::"
+        if: "! env.GIT_DIFF"
+
       - name: Get Composer Cache Directory
         id: composer-cache
         run: |
           echo "::set-output name=dir::$(composer config cache-files-dir)"
-        if: env.GIT_DIFF
+        if: env.RUNNING
       - name: Cache composer modules
         uses: actions/cache@v1
         with:
@@ -39,13 +39,13 @@ jobs:
           key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
           restore-keys: |
             ${{ runner.os }}-composer-
-        if: env.GIT_DIFF
+        if: env.RUNNING
       - name: Prepare
         run: composer setup
-        if: env.GIT_DIFF
+        if: env.RUNNING
       - name: Check code style
         run: composer phpcs
-        if: env.GIT_DIFF
+        if: env.RUNNING
       - uses: 8398a7/action-slack@v2
         with:
           status: failure
@@ -53,12 +53,15 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
         if: failure()
+
   phpmd:
     name: PHPMD
     runs-on: ubuntu-latest
     env:
       LINT: 1
     steps:
+      - name: Set running flag
+        run: echo "::set-env name=RUNNING::1"
       - uses: actions/checkout@v2
       - uses: technote-space/get-git-comment-action@v1
       - uses: technote-space/get-diff-action@v1
@@ -67,11 +70,15 @@ jobs:
           SUFFIX_FILTER: .php
           SEPARATOR: ','
         if: "! contains(env.COMMIT_MESSAGE, '[skip ci]') && ! contains(env.COMMIT_MESSAGE, '[ci skip]')"
+      - name: Set running flag
+        run: echo "::set-env name=RUNNING::"
+        if: "! env.GIT_DIFF"
+
       - name: Get Composer Cache Directory
         id: composer-cache
         run: |
           echo "::set-output name=dir::$(composer config cache-files-dir)"
-        if: env.GIT_DIFF
+        if: env.RUNNING
       - name: Cache composer modules
         uses: actions/cache@v1
         with:
@@ -79,13 +86,13 @@ jobs:
           key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
           restore-keys: |
             ${{ runner.os }}-composer-
-        if: env.GIT_DIFF
+        if: env.RUNNING
       - name: Prepare
         run: composer setup
-        if: env.GIT_DIFF
+        if: env.RUNNING
       - name: Check code style
         run: composer phpmd
-        if: env.GIT_DIFF
+        if: env.RUNNING
       - uses: 8398a7/action-slack@v2
         with:
           status: failure
@@ -105,6 +112,8 @@ jobs:
           - php: '7.3'
             SEND_CODECOV: 1
     steps:
+      - name: Set running flag
+        run: echo "::set-env name=RUNNING::1"
       - uses: actions/checkout@v2
       - uses: technote-space/get-git-comment-action@v1
       - uses: technote-space/get-diff-action@v1
@@ -117,16 +126,28 @@ jobs:
           SUFFIX_FILTER: .php
           FILES: composer.lock
         if: "! contains(env.COMMIT_MESSAGE, '[skip ci]') && ! contains(env.COMMIT_MESSAGE, '[ci skip]')"
+      - name: Set running flag
+        run: echo "::set-env name=RUNNING::"
+        if: "! env.GIT_DIFF"
+      - name: Set running flag
+        if: matrix.SEND_CODECOV == 1 && startsWith(github.ref, 'refs/tags/')
+        run: echo "::set-env name=RUNNING::1"
+      - name: Set running flag
+        run: |
+          if [[ ! -f composer.json ]] || ! < composer.json jq -r '.scripts | keys[]' | grep -qe '^phpunit$'; then
+            echo "::set-env name=RUNNING::"
+          fi
+
       - name: Switch PHP version
         env:
           PHP_VERSION: ${{ matrix.php }}
         run: sudo ln -sf "/usr/bin/php$PHP_VERSION" /etc/alternatives/php
-        if: env.GIT_DIFF || github.event_name == 'push'
+        if: env.RUNNING
       - name: Get Composer Cache Directory
         id: composer-cache
         run: |
           echo "::set-output name=dir::$(composer config cache-files-dir)"
-        if: env.GIT_DIFF || github.event_name == 'push'
+        if: env.RUNNING
       - name: Cache composer modules
         uses: actions/cache@v1
         with:
@@ -134,13 +155,13 @@ jobs:
           key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
           restore-keys: |
             ${{ runner.os }}-composer-
-        if: env.GIT_DIFF || github.event_name == 'push'
+        if: env.RUNNING
       - name: Prepare
         run: composer setup
-        if: env.GIT_DIFF || github.event_name == 'push'
+        if: env.RUNNING
       - name: Run tests
         run: composer phpunit
-        if: env.GIT_DIFF || github.event_name == 'push'
+        if: env.RUNNING
       - name: Codecov
         run: |
           if [ -n "$CODECOV_TOKEN" ]; then
@@ -149,7 +170,7 @@ jobs:
         env:
           CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
           COVERAGE_FILE: ./coverage/clover.xml
-        if: matrix.SEND_CODECOV == 1 && (env.GIT_DIFF || github.event_name == 'push')
+        if: env.RUNNING && matrix.SEND_CODECOV == 1
       - uses: 8398a7/action-slack@v2
         with:
           status: failure
@@ -158,14 +179,54 @@ jobs:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
         if: failure()
 
-  slack:
-    name: Slack
-    needs: [phpunit]
+  pages:
+    name: Publish GitHub Pages
+    needs: phpunit
     runs-on: ubuntu-latest
+    if: startsWith(github.ref, 'refs/tags/')
+    env:
+      GH_PAGES_DIR: public/gh-pages
     steps:
+      - name: Set running flag
+        run: echo "::set-env name=RUNNING::1"
+      - uses: actions/checkout@v2
+        with:
+          persist-credentials: false
+      - name: Set running flag
+        run: |
+          if [[ ! -f composer.json ]] || ! < composer.json jq -r '.scripts | keys[]' | grep -qe '^bin:gh-pages$'; then
+            echo "::set-env name=RUNNING::"
+          fi
+
+      - name: Get Yarn Cache Directory
+        id: yarn-cache
+        run: echo "::set-output name=dir::$(yarn cache dir)"
+        if: env.RUNNING
+      - name: Cache node dependencies
+        uses: actions/cache@v1
+        with:
+          path: ${{ steps.yarn-cache.outputs.dir }}
+          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-yarn-
+        if: env.RUNNING
+      - name: Build
+        run: composer bin:gh-pages
+        env:
+          GH_PAGES_BASE:
+          GH_PAGES_TRACKING_ID: UA-78163306-3
+        if: env.RUNNING
+      - name: Deploy
+        uses: JamesIves/github-pages-deploy-action@releases/v3
+        with:
+          ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+          BRANCH: gh-pages
+          FOLDER: public/gh-pages
+        if: env.RUNNING
       - uses: 8398a7/action-slack@v2
         with:
-          status: success
+          status: ${{ job.status }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+        if: always()
