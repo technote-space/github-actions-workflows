@@ -25,8 +25,9 @@ jobs:
 #            bash .github/workflows/.tmp/workflows/gh-actions/copy.sh
 #            bash .github/workflows/.tmp/workflows/js-repo/copy.sh [release, release-pages, release-pages-releases, release-releases]
 #            bash .github/workflows/.tmp/workflows/ts-repo/copy.sh [release, release-pages, release-pages-releases, release-releases]
-#            bash .github/workflows/.tmp/workflows/wp-plugin/copy.sh [releases, test-releases, test-pages-releases] [php-js-lint, php-js-test, php-lint, php-test]
-#            bash .github/workflows/.tmp/workflows/composer/copy.sh [lint, test, test.php56]
+#            bash .github/workflows/.tmp/workflows/wp-plugin/copy.sh
+#            bash .github/workflows/.tmp/workflows/composer/copy.sh [test, test.php56]
+#            bash .github/workflows/.tmp/workflows/laravel/copy.sh
 
 #            sed -i 's/cron:.\+$/cron: 0 17 * * */' .github/workflows/update-dependencies.yml
 #            sed -i 's/cron:.\+$/cron: 0 9 * * 1/' .github/workflows/update-dependencies.yml
