@@ -12,6 +12,7 @@ rm -f "${GITHUB_WORKSPACE}"/.github/workflows/*.yml
 
 cp -f "${common}"/workflows/*.yml "${GITHUB_WORKSPACE}"/.github/workflows/
 cp -f "${common}"/settings/*.yml "${GITHUB_WORKSPACE}"/.github/
+cp -f "${common}"/settings/*.md "${GITHUB_WORKSPACE}"/.github/
 cp -f "${current}"/*.yml "${GITHUB_WORKSPACE}"/.github/workflows/
 cp -f "${tmp}"/sync-workflows.yml "${GITHUB_WORKSPACE}"/.github/workflows/sync-workflows.yml > /dev/null 2>&1 || :
 
