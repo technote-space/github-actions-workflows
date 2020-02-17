@@ -144,7 +144,7 @@ jobs:
         run: echo "::set-env name=RUNNING::1"
       - name: Set running flag
         run: |
-          if [[ ! -f composer.json ]] || ! < composer.json jq -r '.scripts | keys[]' | grep -qe '^phpunit$'; then
+          if [[ ! -f composer.json ]] || ! < composer.json jq -r '."require-dev" | keys[]' | grep -qe '^phpunit\/phpunit$'; then
             echo "::set-env name=RUNNING::"
           fi
 
