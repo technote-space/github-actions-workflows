@@ -28,10 +28,7 @@ jobs:
     name: PR Labeler
     runs-on: ubuntu-latest
     steps:
-      - name: PR Labeler
-        uses: technote-space/pr-labeler-action@v3
-        with:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - uses: technote-space/pr-labeler-action@v3
 
   checkVersion:
     name: Check package version
