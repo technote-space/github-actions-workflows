@@ -141,8 +141,9 @@ jobs:
             ${{ runner.os }}-yarn-
 
       - name: Release GitHub Actions
-        uses: technote-space/release-github-actions@v3
+        uses: technote-space/release-github-actions@v4
         with:
+          BRANCH_NAME: 'releases/${MAJOR}, gh-actions'
           OUTPUT_BUILD_INFO_FILENAME: build.json
           TEST_TAG_PREFIX: test/
           ORIGINAL_TAG_PREFIX: original/
