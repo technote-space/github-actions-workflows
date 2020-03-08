@@ -91,9 +91,9 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        php: ['7.2', '7.3']
+        php: ['7.3', '7.4']
         include:
-          - php: '7.3'
+          - php: '7.4'
             SEND_CODECOV: 1
     steps:
       - name: Set running flag
@@ -125,9 +125,10 @@ jobs:
           fi
 
       - name: Switch PHP version
-        env:
-          PHP_VERSION: ${{ matrix.php }}
-        run: sudo ln -sf "/usr/bin/php$PHP_VERSION" /etc/alternatives/php
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          coverage: xdebug
         if: env.RUNNING
       - name: Get Composer Cache Directory
         id: composer-cache

@@ -135,9 +135,10 @@ jobs:
           fi
 
       - name: Switch PHP version
-        env:
-          PHP_VERSION: ${{ matrix.php }}
-        run: sudo ln -sf "/usr/bin/php$PHP_VERSION" /etc/alternatives/php
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          coverage: xdebug
         if: env.RUNNING
       - name: Get Composer Cache Directory
         id: composer-cache
