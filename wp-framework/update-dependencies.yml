@@ -18,6 +18,7 @@ jobs:
     name: Update dependencies
     runs-on: ubuntu-latest
     steps:
+      - uses: technote-space/auto-cancel-redundant-job@v1
       - name: Update dependencies
         uses: technote-space/create-pr-action@v1
         with:
