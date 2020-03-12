@@ -21,5 +21,6 @@ else
 	cp -f "${current}"/ci/test.yml "${GITHUB_WORKSPACE}"/.github/workflows/ci.yml
 fi
 rm -f "${GITHUB_WORKSPACE}"/.github/workflows/gh-releases.yml
+sed -i 's/cron:.\+$/cron: 0 0 2 * */' "${GITHUB_WORKSPACE}"/.github/workflows/broken-link-check.yml
 
 rm -rdf "${tmp}"

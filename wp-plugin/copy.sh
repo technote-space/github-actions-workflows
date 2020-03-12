@@ -16,5 +16,6 @@ cp -f "${common}"/settings/*.md "${GITHUB_WORKSPACE}"/.github/
 cp -f "${current}"/*.yml "${GITHUB_WORKSPACE}"/.github/workflows/
 cp -f "${tmp}"/sync-workflows.yml "${GITHUB_WORKSPACE}"/.github/workflows/sync-workflows.yml > /dev/null 2>&1 || :
 rm -f "${GITHUB_WORKSPACE}"/.github/workflows/gh-releases.yml
+sed -i 's/cron:.\+$/cron: 0 0 8 * */' "${GITHUB_WORKSPACE}"/.github/workflows/broken-link-check.yml
 
 rm -rdf "${tmp}"
