@@ -20,9 +20,9 @@ jobs:
       - uses: technote-space/load-config-action@v1
         with:
           CONFIG_FILENAME: workflow-settings.json
-          PREFIX: INPUT_
       - uses: technote-space/pr-commit-body-action@v1
         with:
+          EXCLUDE_MESSAGES: ${{ env.EXCLUDE_MESSAGES }}
           TITLE: '## Changes'
           LINK_ISSUE_KEYWORD: ${{ (startsWith(github.head_ref, 'release/') && 'closes') || '' }}
           FILTER_PR: true
@@ -35,9 +35,9 @@ jobs:
       - uses: technote-space/load-config-action@v1
         with:
           CONFIG_FILENAME: workflow-settings.json
-          PREFIX: INPUT_
       - uses: technote-space/release-type-action@v1
         with:
+          EXCLUDE_MESSAGES: ${{ env.EXCLUDE_MESSAGES }}
           GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}
 
   checkVersion:
@@ -48,7 +48,6 @@ jobs:
       - uses: technote-space/load-config-action@v1
         with:
           CONFIG_FILENAME: workflow-settings.json
-          PREFIX: INPUT_
       - name: Set running flag
         run: echo "::set-env name=RUNNING::1"
       - uses: actions/checkout@v2
@@ -60,6 +59,8 @@ jobs:
 
       - name: Get version
         uses: technote-space/get-next-version-action@v1
+        with:
+          EXCLUDE_MESSAGES: ${{ env.EXCLUDE_MESSAGES }}
         if: env.RUNNING
       - name: Check package version
         uses: technote-space/package-version-check-action@v1

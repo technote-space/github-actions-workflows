@@ -15,9 +15,10 @@ jobs:
       - uses: technote-space/load-config-action@v1
         with:
           CONFIG_FILENAME: workflow-settings.json
-          PREFIX: INPUT_
       - name: Get version
         uses: technote-space/get-next-version-action@v1
+        with:
+          EXCLUDE_MESSAGES: ${{ env.EXCLUDE_MESSAGES }}
         if: "! startsWith(github.head_ref, 'release/v')"
       - name: Get version
         run: echo "::set-env name=NEXT_VERSION::${HEAD_REF#release/}"
