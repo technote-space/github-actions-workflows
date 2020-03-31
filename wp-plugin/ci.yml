@@ -278,6 +278,7 @@ jobs:
           WP_MULTISITE: ${{ matrix.WP_MULTISITE }}
           ACTIVATE_POPULAR_PLUGINS: ${{ matrix.ACTIVATE_POPULAR_PLUGINS }}
         if: env.RUNNING
+      - run: sudo systemctl start mysql
       - name: Run tests
         run: bash travis-ci/bin/php/wp-test.sh
         env:
