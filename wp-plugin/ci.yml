@@ -271,6 +271,13 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-composer-
         if: env.RUNNING
+      - uses: actions/cache@v1
+        with:
+          path: .plugin
+          key: plugin-cache-${{ github.run_id }}
+          restore-keys: |
+            plugin-cache-
+        if: env.RUNNING && matrix.ACTIVATE_POPULAR_PLUGINS == 1
       - name: Prepare setting
         run: git clone --depth=1 https://github.com/wp-content-framework/travis-ci.git travis-ci && bash travis-ci/bin/prepare.sh
         env:
