@@ -158,6 +158,8 @@ jobs:
       - name: Prepare setting
         run: composer prepare
         if: env.RUNNING
+      - run: sudo systemctl start mysql
+        if: env.RUNNING
       - name: Run tests
         run: composer phpunit
         if: env.RUNNING
