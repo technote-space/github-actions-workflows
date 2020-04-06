@@ -9,6 +9,7 @@ jobs:
   releases:
     name: Create Release
     runs-on: ubuntu-latest
+    timeout-minutes: 3
     steps:
       - name: Get version
         run: echo "::set-env name=TAG_NAME::${HEAD_REF#refs/tags/}"
