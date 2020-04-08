@@ -21,4 +21,12 @@ cp -f "${tmp}"/sync-workflows.yml "${GITHUB_WORKSPACE}"/.github/workflows/sync-w
 find "${GITHUB_WORKSPACE}"/.github/workflows -maxdepth 1 -type f -name '*.yml' -print0 | xargs -0 readlink -f | while read -r file; do sed -i "s/uses: \(${GITHUB_REPOSITORY/\//\\/}\)@.\+$/uses: \1@gh-actions/" "$file"; done
 rm -f "${GITHUB_WORKSPACE}"/.github/workflows/gh-releases.yml
 
+# shellcheck disable=SC2016
+MINUTE=$(echo "${GITHUB_REPOSITORY}" | md5sum | tr -d -c 0-9 | xargs -I{} echo {}123 | xargs -I{} bash -c 'echo $(({} % 60))')
+# shellcheck disable=SC2016
+HOUR=$(echo "${GITHUB_REPOSITORY}" | md5sum | tr -d -c 0-9 | xargs -I{} echo {}123 | xargs -I{} bash -c 'echo $(({} % 24))')
+# shellcheck disable=SC2016
+DATE=$(echo "${GITHUB_REPOSITORY}" | md5sum | tr -d -c 0-9 | xargs -I{} echo {}123 | xargs -I{} bash -c 'echo $(({} % 28 + 1))')
+sed -i "s/cron:.\+$/cron: ${MINUTE} ${HOUR} ${DATE} * */" "${GITHUB_WORKSPACE}"/.github/workflows/broken-link-check.yml
+
 rm -rdf "${tmp}"

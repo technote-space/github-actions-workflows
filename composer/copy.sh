@@ -23,4 +23,12 @@ else
 fi
 rm -f "${GITHUB_WORKSPACE}"/.github/workflows/gh-releases.yml
 
+# shellcheck disable=SC2016
+MINUTE=$(echo "${GITHUB_REPOSITORY}" | md5sum | tr -d -c 0-9 | xargs -I{} echo {}123 | xargs -I{} bash -c 'echo $(({} % 60))')
+# shellcheck disable=SC2016
+HOUR=$(echo "${GITHUB_REPOSITORY}" | md5sum | tr -d -c 0-9 | xargs -I{} echo {}123 | xargs -I{} bash -c 'echo $(({} % 24))')
+# shellcheck disable=SC2016
+DATE=$(echo "${GITHUB_REPOSITORY}" | md5sum | tr -d -c 0-9 | xargs -I{} echo {}123 | xargs -I{} bash -c 'echo $(({} % 28 + 1))')
+sed -i "s/cron:.\+$/cron: ${MINUTE} ${HOUR} ${DATE} * */" "${GITHUB_WORKSPACE}"/.github/workflows/broken-link-check.yml
+
 rm -rdf "${tmp}"
