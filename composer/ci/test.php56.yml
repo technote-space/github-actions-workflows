@@ -9,7 +9,6 @@ on:
 name: CI
 
 env:
-  CI: 1
   COVERAGE: 1
   WORKSPACE: ${{ github.workspace }}
 
