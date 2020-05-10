@@ -60,7 +60,7 @@ jobs:
     timeout-minutes: 10
     strategy:
       matrix:
-        os: [ubuntu-latest, ubuntu-16.04, macos-latest, windows-latest]
+        os: [ubuntu-latest, ubuntu-16.04, macos-latest]
     steps:
       - name: Set running flag
         run: echo "::set-env name=RUNNING::1"
