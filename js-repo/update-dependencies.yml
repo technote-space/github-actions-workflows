@@ -46,6 +46,8 @@ jobs:
           AUTO_MERGE_THRESHOLD_DAYS: 14
 
       - name: Set running flag
+        run: echo "::set-env name=RUNNING2::"
+      - name: Set running flag
         run: echo "::set-env name=RUNNING2::1"
         if: env.RUNNING1 && steps.update_deps.outputs.result != 'succeeded' && github.event_name == 'pull_request' && github.event.action != 'closed' && startsWith(github.head_ref, 'release/')
       - uses: actions/checkout@v2
