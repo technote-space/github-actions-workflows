@@ -28,7 +28,7 @@ jobs:
         run: echo "::set-env name=RUNNING::1"
       - uses: actions/checkout@v2
       - uses: technote-space/get-git-comment-action@v1
-      - uses: technote-space/get-diff-action@v2
+      - uses: technote-space/get-diff-action@v3
         with:
           SUFFIX_FILTER: .php
         if: "! contains(env.COMMIT_MESSAGE, '[skip ci]') && ! contains(env.COMMIT_MESSAGE, '[ci skip]')"
@@ -67,7 +67,7 @@ jobs:
         run: echo "::set-env name=RUNNING::1"
       - uses: actions/checkout@v2
       - uses: technote-space/get-git-comment-action@v1
-      - uses: technote-space/get-diff-action@v2
+      - uses: technote-space/get-diff-action@v3
         with:
           SUFFIX_FILTER: .php
           SEPARATOR: ','
@@ -112,7 +112,7 @@ jobs:
         run: echo "::set-env name=RUNNING::1"
       - uses: actions/checkout@v2
       - uses: technote-space/get-git-comment-action@v1
-      - uses: technote-space/get-diff-action@v2
+      - uses: technote-space/get-diff-action@v3
         with:
           PREFIX_FILTER: |
             configs/
