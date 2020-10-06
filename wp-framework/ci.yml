@@ -17,7 +17,7 @@ jobs:
         with:
           EXCLUDE_MERGED: 'true'
       - name: Set running flag
-        run: echo "::set-env name=RUNNING::1"
+        run: echo "RUNNING=1" >> $GITHUB_ENV
       - uses: actions/checkout@v2
       - uses: technote-space/get-git-comment-action@v1
       - uses: technote-space/get-diff-action@v3
@@ -59,7 +59,7 @@ jobs:
       LINT: 1
     steps:
       - name: Set running flag
-        run: echo "::set-env name=RUNNING::1"
+        run: echo "RUNNING=1" >> $GITHUB_ENV
       - uses: actions/checkout@v2
       - uses: technote-space/get-git-comment-action@v1
       - uses: technote-space/get-diff-action@v3
@@ -112,7 +112,7 @@ jobs:
             SEND_CODECOV: 1
     steps:
       - name: Set running flag
-        run: echo "::set-env name=RUNNING::1"
+        run: echo "RUNNING=1" >> $GITHUB_ENV
       - uses: actions/checkout@v2
       - uses: technote-space/get-git-comment-action@v1
       - uses: technote-space/get-diff-action@v3
@@ -129,10 +129,10 @@ jobs:
         if: "! env.GIT_DIFF"
       - name: Set running flag
         if: "matrix.SEND_CODECOV == 1 && ! startsWith(github.ref, 'refs/tags/') && github.event.base_ref == format('refs/heads/{0}', github.event.repository.default_branch)"
-        run: echo "::set-env name=RUNNING::1"
+        run: echo "RUNNING=1" >> $GITHUB_ENV
       - name: Set running flag
         if: matrix.SEND_CODECOV == 1 && startsWith(github.ref, 'refs/tags/v')
-        run: echo "::set-env name=RUNNING::1"
+        run: echo "RUNNING=1" >> $GITHUB_ENV
       - name: Set running flag
         run: |
           if [[ ! -f composer.json ]] || ! < composer.json jq -r '."require-dev" | keys[]' | grep -qe '^phpunit\/phpunit$'; then
@@ -183,7 +183,7 @@ jobs:
     if: startsWith(github.ref, 'refs/tags/v')
     steps:
       - name: Get version
-        run: echo "::set-env name=TAG_NAME::${HEAD_REF#refs/tags/}"
+        run: echo "TAG_NAME=${HEAD_REF#refs/tags/}" >> $GITHUB_ENV
         env:
           HEAD_REF: ${{ github.ref }}
       - name: Create Release

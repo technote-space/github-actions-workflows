@@ -53,7 +53,7 @@ jobs:
         with:
           CONFIG_FILENAME: workflow-settings.json
       - name: Set running flag
-        run: echo "::set-env name=RUNNING::1"
+        run: echo "RUNNING=1" >> $GITHUB_ENV
       - uses: actions/checkout@v2
         with:
           ref: ${{ github.head_ref }}
@@ -72,7 +72,7 @@ jobs:
           EXCLUDE_MESSAGES: ${{ env.EXCLUDE_MESSAGES }}
         if: "env.RUNNING && ! startsWith(github.head_ref, 'release/v')"
       - name: Get version
-        run: echo "::set-env name=NEXT_VERSION::${HEAD_REF#release/}"
+        run: echo "NEXT_VERSION=${HEAD_REF#release/}" >> $GITHUB_ENV
         env:
           HEAD_REF: ${{ github.head_ref }}
         if: env.RUNNING && startsWith(github.head_ref, 'release/v')
@@ -91,7 +91,7 @@ jobs:
     if: "github.event.pull_request.head.user.id == github.event.pull_request.base.user.id && startsWith(github.head_ref, 'release/')"
     steps:
       - name: Set running flag
-        run: echo "::set-env name=RUNNING::1"
+        run: echo "RUNNING=1" >> $GITHUB_ENV
       - name: Set running flag
         run: |
           if [ -z "$NPM_AUTH_TOKEN" ]; then
