@@ -60,7 +60,7 @@ jobs:
       - name: Set running flag
         run: |
           if [[ ! -f package.json ]] || [[ $(< package.json jq -r '.version == null') == 'true' ]]; then
-            echo "::set-env name=RUNNING::"
+            echo "RUNNING=" >> $GITHUB_ENV
           fi
 
       - name: Sort
@@ -95,7 +95,7 @@ jobs:
       - name: Set running flag
         run: |
           if [ -z "$NPM_AUTH_TOKEN" ]; then
-            echo "::set-env name=RUNNING::"
+            echo "RUNNING=" >> $GITHUB_ENV
           fi
         env:
           NPM_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}

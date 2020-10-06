@@ -16,7 +16,7 @@ jobs:
     if: "! startsWith(github.head_ref, 'release/v')"
     steps:
       - name: Set running flag
-        run: echo "::set-env name=RUNNING1::"
+        run: echo "RUNNING1=" >> $GITHUB_ENV
       - name: Set running flag
         run: echo "RUNNING1=1" >> $GITHUB_ENV
         if: github.event.pull_request.head.user.id == github.event.pull_request.base.user.id
@@ -47,7 +47,7 @@ jobs:
           AUTO_MERGE_THRESHOLD_DAYS: 14
 
       - name: Set running flag
-        run: echo "::set-env name=RUNNING2::"
+        run: echo "RUNNING2=" >> $GITHUB_ENV
       - name: Set running flag
         run: echo "RUNNING2=1" >> $GITHUB_ENV
         if: env.RUNNING1 && steps.update_deps.outputs.result != 'succeeded' && github.event_name == 'pull_request' && github.event.action != 'closed' && startsWith(github.head_ref, 'release/')
@@ -56,7 +56,7 @@ jobs:
       - name: Set running flag
         run: |
           if [[ ! -f package.json ]] || [[ $(< package.json jq -r '.version == null') == 'true' ]]; then
-            echo "::set-env name=RUNNING2::"
+            echo "RUNNING2=" >> $GITHUB_ENV
           fi
       - name: Sort
         run: npx sort-package-json
