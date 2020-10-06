@@ -15,7 +15,7 @@ jobs:
         with:
           EXCLUDE_MERGED: 'true'
       - name: Set running flag
-        run: echo "::set-env name=RUNNING::1"
+        run: echo "RUNNING=1" >> $GITHUB_ENV
       - uses: actions/checkout@v2
       - uses: technote-space/get-git-comment-action@v1
       - uses: technote-space/get-diff-action@v3
@@ -56,7 +56,7 @@ jobs:
     timeout-minutes: 5
     steps:
       - name: Set running flag
-        run: echo "::set-env name=RUNNING::1"
+        run: echo "RUNNING=1" >> $GITHUB_ENV
       - uses: actions/checkout@v2
       - uses: technote-space/get-git-comment-action@v1
       - uses: technote-space/get-diff-action@v3
@@ -98,7 +98,7 @@ jobs:
       APP_ENV: testing
     steps:
       - name: Set running flag
-        run: echo "::set-env name=RUNNING::1"
+        run: echo "RUNNING=1" >> $GITHUB_ENV
       - uses: actions/checkout@v2
       - uses: technote-space/get-git-comment-action@v1
       - uses: technote-space/get-diff-action@v3
@@ -136,7 +136,7 @@ jobs:
       APP_ENV: testing
     steps:
       - name: Set running flag
-        run: echo "::set-env name=RUNNING::1"
+        run: echo "RUNNING=1" >> $GITHUB_ENV
       - uses: actions/checkout@v2
       - uses: technote-space/get-git-comment-action@v1
       - uses: technote-space/get-diff-action@v3
@@ -175,7 +175,7 @@ jobs:
         node: ['12', '14']
     steps:
       - name: Set running flag
-        run: echo "::set-env name=RUNNING::1"
+        run: echo "RUNNING=1" >> $GITHUB_ENV
       - uses: actions/checkout@v2
       - uses: technote-space/get-git-comment-action@v1
       - uses: technote-space/get-diff-action@v3
@@ -196,10 +196,10 @@ jobs:
         if: "! env.GIT_DIFF"
       - name: Set running flag
         if: "matrix.node == '12' && ! startsWith(github.ref, 'refs/tags/') && github.event.base_ref == format('refs/heads/{0}', github.event.repository.default_branch)"
-        run: echo "::set-env name=RUNNING::1"
+        run: echo "RUNNING=1" >> $GITHUB_ENV
       - name: Set running flag
         if: matrix.node == '12' && startsWith(github.ref, 'refs/tags/')
-        run: echo "::set-env name=RUNNING::1"
+        run: echo "RUNNING=1" >> $GITHUB_ENV
       - name: Set running flag
         run: |
           if [[ ! -f package.json ]] || ! < package.json jq -r '.scripts | keys[]' | grep -qe '^cover$'; then
@@ -249,7 +249,7 @@ jobs:
             SEND_CODECOV: 1
     steps:
       - name: Set running flag
-        run: echo "::set-env name=RUNNING::1"
+        run: echo "RUNNING=1" >> $GITHUB_ENV
       - uses: actions/checkout@v2
       - uses: technote-space/get-git-comment-action@v1
       - uses: technote-space/get-diff-action@v3
@@ -262,10 +262,10 @@ jobs:
         if: "! env.GIT_DIFF"
       - name: Set running flag
         if: "matrix.SEND_CODECOV == 1 && ! startsWith(github.ref, 'refs/tags/') && github.event.base_ref == format('refs/heads/{0}', github.event.repository.default_branch)"
-        run: echo "::set-env name=RUNNING::1"
+        run: echo "RUNNING=1" >> $GITHUB_ENV
       - name: Set running flag
         if: matrix.SEND_CODECOV == 1 && startsWith(github.ref, 'refs/tags/')
-        run: echo "::set-env name=RUNNING::1"
+        run: echo "RUNNING=1" >> $GITHUB_ENV
       - name: Set running flag
         run: |
           if [[ ! -f composer.json ]] || ! < composer.json jq -r '.scripts | keys[]' | grep -qe '^phpunit$'; then
@@ -326,7 +326,7 @@ jobs:
         php: ['7.4', '7.3']
     steps:
       - name: Set running flag
-        run: echo "::set-env name=RUNNING::1"
+        run: echo "RUNNING=1" >> $GITHUB_ENV
       - uses: actions/checkout@v2
       - uses: technote-space/get-git-comment-action@v1
       - uses: technote-space/get-diff-action@v3
@@ -393,7 +393,7 @@ jobs:
       GH_PAGES_DIR: public/gh-pages
     steps:
       - name: Set running flag
-        run: echo "::set-env name=RUNNING::1"
+        run: echo "RUNNING=1" >> $GITHUB_ENV
       - uses: actions/checkout@v2
         with:
           persist-credentials: false
@@ -436,7 +436,7 @@ jobs:
     timeout-minutes: 5
     steps:
       - name: Get version
-        run: echo "::set-env name=TAG_NAME::${HEAD_REF#refs/tags/}"
+        run: echo "TAG_NAME=${HEAD_REF#refs/tags/}" >> $GITHUB_ENV
         env:
           HEAD_REF: ${{ github.ref }}
       - name: Create Release

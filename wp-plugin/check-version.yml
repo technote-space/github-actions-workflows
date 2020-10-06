@@ -15,7 +15,7 @@ jobs:
         with:
           CONFIG_FILENAME: workflow-settings.json
       - name: Set running flag
-        run: echo "::set-env name=RUNNING::1"
+        run: echo "RUNNING=1" >> $GITHUB_ENV
       - uses: actions/checkout@v2
       - name: Set running flag
         run: |
