@@ -20,7 +20,7 @@ jobs:
       - name: Set running flag
         run: |
           if [[ ! -f readme.txt ]]; then
-            echo "::set-env name=RUNNING::"
+            echo "RUNNING=" >> $GITHUB_ENV
           fi
 
       - name: Get version

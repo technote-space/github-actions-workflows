@@ -20,7 +20,7 @@ jobs:
     timeout-minutes: 10
     steps:
       - name: Set running flag
-        run: echo "::set-env name=RUNNING::"
+        run: echo "RUNNING=" >> $GITHUB_ENV
       - name: Set running flag
         run: echo "RUNNING=1" >> $GITHUB_ENV
         if: github.event.pull_request.head.user.id == github.event.pull_request.base.user.id
