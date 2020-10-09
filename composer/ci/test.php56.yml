@@ -28,9 +28,9 @@ jobs:
         run: echo "RUNNING=1" >> $GITHUB_ENV
       - uses: actions/checkout@v2
       - uses: technote-space/get-git-comment-action@v1
-      - uses: technote-space/get-diff-action@v3
+      - uses: technote-space/get-diff-action@v4
         with:
-          SUFFIX_FILTER: .php
+          PATTERNS: '**/*.php'
         if: "! contains(env.COMMIT_MESSAGE, '[skip ci]') && ! contains(env.COMMIT_MESSAGE, '[ci skip]')"
       - name: Set running flag
         run: echo "RUNNING=" >> $GITHUB_ENV
@@ -67,9 +67,9 @@ jobs:
         run: echo "RUNNING=1" >> $GITHUB_ENV
       - uses: actions/checkout@v2
       - uses: technote-space/get-git-comment-action@v1
-      - uses: technote-space/get-diff-action@v3
+      - uses: technote-space/get-diff-action@v4
         with:
-          SUFFIX_FILTER: .php
+          PATTERNS: '**/*.php'
           SEPARATOR: ','
         if: "! contains(env.COMMIT_MESSAGE, '[skip ci]') && ! contains(env.COMMIT_MESSAGE, '[ci skip]')"
       - name: Set running flag
@@ -112,13 +112,9 @@ jobs:
         run: echo "RUNNING=1" >> $GITHUB_ENV
       - uses: actions/checkout@v2
       - uses: technote-space/get-git-comment-action@v1
-      - uses: technote-space/get-diff-action@v3
+      - uses: technote-space/get-diff-action@v4
         with:
-          PREFIX_FILTER: |
-            configs/
-            src/
-            tests/
-          SUFFIX_FILTER: .php
+          PATTERNS: +(configs|src|tests)/**/*.php
           FILES: composer.lock
         if: "! contains(env.COMMIT_MESSAGE, '[skip ci]') && ! contains(env.COMMIT_MESSAGE, '[ci skip]')"
       - name: Set running flag
