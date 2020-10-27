@@ -36,7 +36,7 @@ jobs:
         run: echo "::set-output name=dir::$(yarn cache dir)"
         if: env.RUNNING
       - name: Cache node dependencies
-        uses: actions/cache@v1
+        uses: actions/cache@v2
         with:
           path: ${{ steps.yarn-cache.outputs.dir }}
           key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
@@ -74,7 +74,7 @@ jobs:
         run: |
           echo "::set-output name=dir::$(composer config cache-files-dir)"
         if: env.RUNNING
-      - uses: actions/cache@v1
+      - uses: actions/cache@v2
         with:
           path: ${{ steps.composer-cache.outputs.dir }}
           key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
@@ -113,7 +113,7 @@ jobs:
         run: |
           echo "::set-output name=dir::$(composer config cache-files-dir)"
         if: env.RUNNING
-      - uses: actions/cache@v1
+      - uses: actions/cache@v2
         with:
           path: ${{ steps.composer-cache.outputs.dir }}
           key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
@@ -172,7 +172,7 @@ jobs:
         run: echo "::set-output name=dir::$(yarn cache dir)"
         if: env.RUNNING
       - name: Cache node dependencies
-        uses: actions/cache@v1
+        uses: actions/cache@v2
         with:
           path: ${{ steps.yarn-cache.outputs.dir }}
           key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
@@ -252,14 +252,14 @@ jobs:
         run: |
           echo "::set-output name=dir::$(composer config cache-files-dir)"
         if: env.RUNNING
-      - uses: actions/cache@v1
+      - uses: actions/cache@v2
         with:
           path: ${{ steps.composer-cache.outputs.dir }}
           key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
           restore-keys: |
             ${{ runner.os }}-composer-
         if: env.RUNNING
-      - uses: actions/cache@v1
+      - uses: actions/cache@v2
         with:
           path: .plugin
           key: plugin-cache-${{ github.run_id }}
@@ -320,7 +320,7 @@ jobs:
         run: echo "::set-output name=dir::$(yarn cache dir)"
         if: env.RUNNING
       - name: Cache node dependencies
-        uses: actions/cache@v1
+        uses: actions/cache@v2
         with:
           path: ${{ steps.yarn-cache.outputs.dir }}
           key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
@@ -358,7 +358,7 @@ jobs:
         id: composer-cache
         run: |
           echo "::set-output name=dir::$(composer config cache-files-dir)"
-      - uses: actions/cache@v1
+      - uses: actions/cache@v2
         with:
           path: ${{ steps.composer-cache.outputs.dir }}
           key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
