@@ -23,8 +23,10 @@ jobs:
           INCLUDE_LEVELS: warning
           EXCLUDE_MESSAGE_PATTERNS: |
             *warning jest*
+            *warning babel-jest*
             *Cloning into*
             *has unmet peer dependency*
+            *has incorrect peer dependency*
       - name: Build attachments
         run: |
           arr1='[{"fields":[{"title":"repo","value":"<https://github.com/${{ github.repository }}|${{ github.repository }}>","short":true},{"title":"action","value":"<${{ github.event.workflow_run.html_url }}|summary>","short":true}]}]'
