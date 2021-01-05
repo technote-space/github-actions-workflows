@@ -17,7 +17,8 @@
   "TOC_TARGET_PATHS": "README*.md",
   "BRANCH_PREFIX": "release/",
   "ANNOTATION_EXCLUDE_PATTERNS": [
-    "warning",
+    "warning jest",
+    "warning babel",
     "Cloning into",
     "has unmet peer dependency",
     "has incorrect peer dependency"
