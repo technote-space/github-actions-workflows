@@ -19,7 +19,7 @@ jobs:
       - uses: technote-space/get-git-comment-action@v1
       - uses: technote-space/get-diff-action@v4
         with:
-          PATTERNS: +(src|server)/**/*.+(js|ts)
+          PATTERNS: +(src|server)/**/*.+(js|ts|jsx|tsx)
           FILES: |
             yarn.lock
             .eslintrc
@@ -63,7 +63,7 @@ jobs:
       - uses: technote-space/get-git-comment-action@v1
       - uses: technote-space/get-diff-action@v4
         with:
-          PATTERNS: +(src|server)/**/*.+(js|ts)
+          PATTERNS: +(src|server)/**/*.+(js|ts|jsx|tsx)
           FILES: yarn.lock
         if: "! contains(env.COMMIT_MESSAGE, '[skip ci]') && ! contains(env.COMMIT_MESSAGE, '[ci skip]')"
       - name: Set running flag
@@ -127,7 +127,7 @@ jobs:
       - uses: technote-space/get-git-comment-action@v1
       - uses: technote-space/get-diff-action@v4
         with:
-          PATTERNS: +(src|server)/**/*.+(js|ts|snap)
+          PATTERNS: +(src|server)/**/*.+(js|ts|jsx|tsx|snap)
           FILES: |
             yarn.lock
             jest.config.js
@@ -189,6 +189,10 @@ jobs:
     if: startsWith(github.ref, 'refs/tags/v')
     steps:
       - uses: actions/checkout@v2
+      - name: Setup node
+        uses: actions/setup-node@v1
+        with:
+          node-version: 15
       - name: Get Yarn Cache Directory
         id: yarn-cache
         run: echo "::set-output name=dir::$(yarn cache dir)"
