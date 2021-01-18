@@ -10,6 +10,9 @@ jobs:
     env:
       LINT: 1
     steps:
+      - uses: actions/setup-node@v1
+        with:
+          node-version: 15
       - uses: technote-space/auto-cancel-redundant-workflow@v1
         with:
           EXCLUDE_MERGED: 'true'
@@ -36,9 +39,9 @@ jobs:
         uses: actions/cache@v2
         with:
           path: ${{ steps.yarn-cache.outputs.dir }}
-          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+          key: ${{ runner.os }}-15-yarn-${{ hashFiles('**/yarn.lock') }}
           restore-keys: |
-            ${{ runner.os }}-yarn-
+            ${{ runner.os }}-15-yarn-
         if: env.RUNNING
       - name: Install Package dependencies
         run: yarn install
@@ -57,6 +60,9 @@ jobs:
     env:
       LINT: 1
     steps:
+      - uses: actions/setup-node@v1
+        with:
+          node-version: 15
       - name: Set running flag
         run: echo "RUNNING=1" >> $GITHUB_ENV
       - uses: actions/checkout@v2
@@ -78,9 +84,9 @@ jobs:
         uses: actions/cache@v2
         with:
           path: ${{ steps.yarn-cache.outputs.dir }}
-          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+          key: ${{ runner.os }}-15-yarn-${{ hashFiles('**/yarn.lock') }}
           restore-keys: |
-            ${{ runner.os }}-yarn-
+            ${{ runner.os }}-15-yarn-
         if: env.RUNNING
       - name: Setup
         run: |
@@ -96,6 +102,9 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
+      - uses: actions/setup-node@v1
+        with:
+          node-version: 15
       - name: Set running flag
         run: echo "RUNNING=1" >> $GITHUB_ENV
       - uses: actions/checkout@v2
@@ -119,8 +128,12 @@ jobs:
     timeout-minutes: 10
     strategy:
       matrix:
-        node: ['14', '15']
+        node: ['15']
     steps:
+      - name: Setup node
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node }}
       - name: Set running flag
         run: echo "RUNNING=1" >> $GITHUB_ENV
       - uses: actions/checkout@v2
@@ -137,10 +150,10 @@ jobs:
         run: echo "RUNNING=" >> $GITHUB_ENV
         if: "! env.GIT_DIFF"
       - name: Set running flag
-        if: "matrix.node == '14' && ! startsWith(github.ref, 'refs/tags/') && github.event.base_ref == format('refs/heads/{0}', github.event.repository.default_branch)"
+        if: "matrix.node == '15' && ! startsWith(github.ref, 'refs/tags/') && github.event.base_ref == format('refs/heads/{0}', github.event.repository.default_branch)"
         run: echo "RUNNING=1" >> $GITHUB_ENV
       - name: Set running flag
-        if: matrix.node == '14' && startsWith(github.ref, 'refs/tags/v')
+        if: matrix.node == '15' && startsWith(github.ref, 'refs/tags/v')
         run: echo "RUNNING=1" >> $GITHUB_ENV
       - name: Set running flag
         run: |
@@ -148,11 +161,6 @@ jobs:
             echo "RUNNING=" >> $GITHUB_ENV
           fi
 
-      - name: Setup node
-        uses: actions/setup-node@v1
-        with:
-          node-version: ${{ matrix.node }}
-        if: env.RUNNING
       - name: Get Yarn Cache Directory
         id: yarn-cache
         run: echo "::set-output name=dir::$(yarn cache dir)"
@@ -179,20 +187,21 @@ jobs:
         env:
           CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
           COVERAGE_FILE: ./coverage/lcov.info
-        if: env.RUNNING && matrix.node == '14'
+        if: env.RUNNING && matrix.node == '15'
 
-  releases:
-    name: Upload build files
+  pages:
+    name: Publish GitHub Pages
     needs: cover
     runs-on: ubuntu-latest
     timeout-minutes: 10
     if: startsWith(github.ref, 'refs/tags/v')
     steps:
-      - uses: actions/checkout@v2
-      - name: Setup node
-        uses: actions/setup-node@v1
+      - uses: actions/setup-node@v1
         with:
           node-version: 15
+      - uses: actions/checkout@v2
+        with:
+          persist-credentials: false
       - name: Get Yarn Cache Directory
         id: yarn-cache
         run: echo "::set-output name=dir::$(yarn cache dir)"
@@ -206,72 +215,26 @@ jobs:
 
       - name: Build
         run: |
-          yarn setup
-          mv out admin
-          zip -r admin admin
-          mv server/index.js server.js
-      - name: Upload
-        uses: technote-space/action-gh-release@v2
+          yarn setup:install
+          yarn license:generate:admin
+          yarn --cwd server build:prisma
+          yarn build:admin
+        env:
+          API_ORIGIN: 'https://frourio-demo.herokuapp.com'
+          SERVER_PORT: 80
+          BASE_PATH: '/api'
+      - name: add nojekyll
+        run: touch ./out/.nojekyll
+      - name: Deploy
+        uses: JamesIves/github-pages-deploy-action@releases/v3
         with:
-          files: |
-            admin.zip
-            server.js
-          draft: true
-
-  releasesElectron:
-    name: Build electron
-    needs: cover
-    runs-on: ${{ matrix.os }}
-    timeout-minutes: 10
-    strategy:
-      matrix:
-        os: [windows-latest, macos-latest]
-    if: startsWith(github.ref, 'refs/tags/v')
-    steps:
-      - uses: actions/checkout@v2
-      - name: Setup node
-        uses: actions/setup-node@v1
-        with:
-          node-version: 15
-      - name: Get Yarn Cache Directory
-        id: yarn-cache
-        run: echo "::set-output name=dir::$(yarn cache dir)"
-      - name: Cache node dependencies
-        uses: actions/cache@v2
-        with:
-          path: ${{ steps.yarn-cache.outputs.dir }}
-          key: ${{ runner.os }}-15-yarn-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-15-yarn-
-
-      - name: Setup
-        run: yarn setup
-      - name: Build for Mac
-        run: |
-          yarn build:electron:mac
-          mv src/electron/dist/mac/FrourioElectronDemo.app FrourioElectronDemo.app
-        if: matrix.os == 'macos-latest'
-      - name: Upload
-        uses: technote-space/action-gh-release@v2
-        with:
-          files: FrourioElectronDemo.app
-          draft: true
-        if: matrix.os == 'macos-latest'
-      - name: Build for Windows
-        run: |
-          yarn build:electron:win
-          mv src/electron/dist/FrourioElectronDemo-win.exe FrourioElectronDemo-setup.exe
-        if: matrix.os == 'windows-latest'
-      - name: Upload
-        uses: technote-space/action-gh-release@v2
-        with:
-          files: FrourioElectronDemo-setup.exe
-          draft: true
-        if: matrix.os == 'windows-latest'
+          ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+          BRANCH: gh-pages
+          FOLDER: ./out
 
   publishRelease:
     name: Create Release
-    needs: [releases, releasesElectron]
+    needs: [pages]
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
