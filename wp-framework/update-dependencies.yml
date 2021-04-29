@@ -7,6 +7,9 @@ on:
     types: [update-deps]
   workflow_dispatch:
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+
 name: Update dependencies
 
 env:
@@ -24,10 +27,6 @@ jobs:
       - name: Set running flag
         run: echo "RUNNING=1" >> $GITHUB_ENV
         if: github.event.pull_request.head.user.id == github.event.pull_request.base.user.id
-      - uses: technote-space/auto-cancel-redundant-workflow@v1
-        if: env.RUNNING
-        with:
-          EXCLUDE_MERGED: 'true'
       - name: Switch PHP version
         uses: shivammathur/setup-php@v2
         with:
