@@ -96,9 +96,9 @@ jobs:
     timeout-minutes: 10
     strategy:
       matrix:
-        php: ['7.3', '7.4', '8.0']
+        php: ['7.4', '8.0']
         include:
-          - php: '7.4'
+          - php: '8.0'
             SEND_CODECOV: 1
     steps:
       - name: Set running flag
