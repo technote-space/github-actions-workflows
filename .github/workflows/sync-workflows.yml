@@ -5,6 +5,9 @@ on:
     types: [sync-workflows]
   workflow_dispatch:
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+
 name: Sync workflows
 jobs:
   release:
@@ -12,9 +15,6 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
-      - uses: technote-space/auto-cancel-redundant-workflow@v1
-        with:
-          EXCLUDE_MERGED: 'true'
       - name: Sync workflows
         uses: technote-space/create-pr-action@v2
         with:
