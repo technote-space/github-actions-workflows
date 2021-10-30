@@ -13,7 +13,7 @@ jobs:
     steps:
       - uses: actions/setup-node@v1
         with:
-          node-version: 15
+          node-version: 16
       - name: Set running flag
         run: echo "RUNNING=1" >> $GITHUB_ENV
       - uses: actions/checkout@v2
@@ -37,9 +37,9 @@ jobs:
         uses: actions/cache@v2
         with:
           path: ${{ steps.yarn-cache.outputs.dir }}
-          key: ${{ runner.os }}-15-yarn-${{ hashFiles('**/yarn.lock') }}
+          key: ${{ runner.os }}-16-yarn-${{ hashFiles('**/yarn.lock') }}
           restore-keys: |
-            ${{ runner.os }}-15-yarn-
+            ${{ runner.os }}-16-yarn-
         if: env.RUNNING
       - name: Check code style
         run: |
@@ -54,7 +54,7 @@ jobs:
     steps:
       - uses: actions/setup-node@v1
         with:
-          node-version: 15
+          node-version: 16
       - name: Set running flag
         run: echo "RUNNING=1" >> $GITHUB_ENV
       - uses: actions/checkout@v2
@@ -78,9 +78,9 @@ jobs:
         uses: actions/cache@v2
         with:
           path: ${{ steps.yarn-cache.outputs.dir }}
-          key: ${{ runner.os }}-15-yarn-${{ hashFiles('**/yarn.lock') }}
+          key: ${{ runner.os }}-16-yarn-${{ hashFiles('**/yarn.lock') }}
           restore-keys: |
-            ${{ runner.os }}-15-yarn-
+            ${{ runner.os }}-16-yarn-
         if: env.RUNNING
       - name: Type check
         run: |
@@ -95,7 +95,7 @@ jobs:
     timeout-minutes: 30
     strategy:
       matrix:
-        node: ['15']
+        node: ['16']
     steps:
       - name: Setup node
         uses: actions/setup-node@v1
@@ -118,10 +118,10 @@ jobs:
         run: echo "RUNNING=" >> $GITHUB_ENV
         if: "! env.GIT_DIFF"
       - name: Set running flag
-        if: "matrix.node == '15' && ! startsWith(github.ref, 'refs/tags/') && github.event.base_ref == format('refs/heads/{0}', github.event.repository.default_branch)"
+        if: "matrix.node == '16' && ! startsWith(github.ref, 'refs/tags/') && github.event.base_ref == format('refs/heads/{0}', github.event.repository.default_branch)"
         run: echo "RUNNING=1" >> $GITHUB_ENV
       - name: Set running flag
-        if: matrix.node == '15' && startsWith(github.ref, 'refs/tags/v')
+        if: matrix.node == '16' && startsWith(github.ref, 'refs/tags/v')
         run: echo "RUNNING=1" >> $GITHUB_ENV
       - name: Set running flag
         run: |
@@ -154,7 +154,7 @@ jobs:
         env:
           CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
           COVERAGE_FILE: ./coverage/lcov.info
-        if: env.RUNNING && matrix.node == '15'
+        if: env.RUNNING && matrix.node == '16'
 
   publishRelease:
     name: Create Release
