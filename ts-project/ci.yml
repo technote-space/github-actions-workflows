@@ -18,7 +18,7 @@ jobs:
         run: echo "RUNNING=1" >> $GITHUB_ENV
       - uses: actions/checkout@v2
       - uses: technote-space/get-git-comment-action@v1
-      - uses: technote-space/get-diff-action@v4
+      - uses: technote-space/get-diff-action@v5
         with:
           PATTERNS: src/**/*.+(js|ts|jsx|tsx)
           FILES: |
@@ -59,7 +59,7 @@ jobs:
         run: echo "RUNNING=1" >> $GITHUB_ENV
       - uses: actions/checkout@v2
       - uses: technote-space/get-git-comment-action@v1
-      - uses: technote-space/get-diff-action@v4
+      - uses: technote-space/get-diff-action@v5
         with:
           PATTERNS: src/**/*.+(js|ts|jsx|tsx)
           FILES: |
@@ -105,7 +105,7 @@ jobs:
         run: echo "RUNNING=1" >> $GITHUB_ENV
       - uses: actions/checkout@v2
       - uses: technote-space/get-git-comment-action@v1
-      - uses: technote-space/get-diff-action@v4
+      - uses: technote-space/get-diff-action@v5
         with:
           PATTERNS: src/**/*.+(js|ts|jsx|tsx|snap)
           FILES: |
