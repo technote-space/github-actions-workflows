@@ -11,12 +11,13 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
-      - uses: actions/setup-node@v1
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
         with:
           node-version: 16
+          cache: yarn
       - name: Set running flag
         run: echo "RUNNING=1" >> $GITHUB_ENV
-      - uses: actions/checkout@v2
       - uses: technote-space/get-git-comment-action@v1
       - uses: technote-space/get-diff-action@v5
         with:
@@ -29,18 +30,6 @@ jobs:
         run: echo "RUNNING=" >> $GITHUB_ENV
         if: "! env.GIT_DIFF"
 
-      - name: Get Yarn Cache Directory
-        id: yarn-cache
-        run: echo "::set-output name=dir::$(yarn cache dir)"
-        if: env.RUNNING
-      - name: Cache node dependencies
-        uses: actions/cache@v2
-        with:
-          path: ${{ steps.yarn-cache.outputs.dir }}
-          key: ${{ runner.os }}-16-yarn-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-16-yarn-
-        if: env.RUNNING
       - name: Check code style
         run: |
           yarn
@@ -52,12 +41,13 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
-      - uses: actions/setup-node@v1
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
         with:
           node-version: 16
+          cache: yarn
       - name: Set running flag
         run: echo "RUNNING=1" >> $GITHUB_ENV
-      - uses: actions/checkout@v2
       - uses: technote-space/get-git-comment-action@v1
       - uses: technote-space/get-diff-action@v5
         with:
@@ -70,18 +60,6 @@ jobs:
         run: echo "RUNNING=" >> $GITHUB_ENV
         if: "! env.GIT_DIFF"
 
-      - name: Get Yarn Cache Directory
-        id: yarn-cache
-        run: echo "::set-output name=dir::$(yarn cache dir)"
-        if: env.RUNNING
-      - name: Cache node dependencies
-        uses: actions/cache@v2
-        with:
-          path: ${{ steps.yarn-cache.outputs.dir }}
-          key: ${{ runner.os }}-16-yarn-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-16-yarn-
-        if: env.RUNNING
       - name: Type check
         run: |
           yarn
@@ -97,13 +75,14 @@ jobs:
       matrix:
         node: ['16']
     steps:
+      - uses: actions/checkout@v2
       - name: Setup node
-        uses: actions/setup-node@v1
+        uses: actions/setup-node@v2
         with:
           node-version: ${{ matrix.node }}
+          cache: yarn
       - name: Set running flag
         run: echo "RUNNING=1" >> $GITHUB_ENV
-      - uses: actions/checkout@v2
       - uses: technote-space/get-git-comment-action@v1
       - uses: technote-space/get-diff-action@v5
         with:
@@ -129,18 +108,6 @@ jobs:
             echo "RUNNING=" >> $GITHUB_ENV
           fi
 
-      - name: Get Yarn Cache Directory
-        id: yarn-cache
-        run: echo "::set-output name=dir::$(yarn cache dir)"
-        if: env.RUNNING
-      - name: Cache node dependencies
-        uses: actions/cache@v2
-        with:
-          path: ${{ steps.yarn-cache.outputs.dir }}
-          key: ${{ runner.os }}-${{ matrix.node }}-yarn-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-${{ matrix.node }}-yarn-
-        if: env.RUNNING
       - name: Run tests
         run: |
           yarn
