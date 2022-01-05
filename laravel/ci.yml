@@ -18,7 +18,7 @@ jobs:
         run: echo "RUNNING=1" >> $GITHUB_ENV
       - uses: actions/checkout@v2
       - uses: technote-space/get-git-comment-action@v1
-      - uses: technote-space/get-diff-action@v5
+      - uses: technote-space/get-diff-action@v6
         with:
           PATTERNS: resources/**/*.+(js|ts|vue)
           FILES: |
@@ -54,7 +54,7 @@ jobs:
         run: echo "RUNNING=1" >> $GITHUB_ENV
       - uses: actions/checkout@v2
       - uses: technote-space/get-git-comment-action@v1
-      - uses: technote-space/get-diff-action@v5
+      - uses: technote-space/get-diff-action@v6
         with:
           PATTERNS: resources/**/*.+(scss|css)
           FILES: .stylelintrc.json
@@ -92,7 +92,7 @@ jobs:
         run: echo "RUNNING=1" >> $GITHUB_ENV
       - uses: actions/checkout@v2
       - uses: technote-space/get-git-comment-action@v1
-      - uses: technote-space/get-diff-action@v5
+      - uses: technote-space/get-diff-action@v6
         with:
           PATTERNS: '**/*.php'
           FILES: phpcs.xml
@@ -135,7 +135,7 @@ jobs:
         run: echo "RUNNING=1" >> $GITHUB_ENV
       - uses: actions/checkout@v2
       - uses: technote-space/get-git-comment-action@v1
-      - uses: technote-space/get-diff-action@v5
+      - uses: technote-space/get-diff-action@v6
         with:
           PATTERNS: '**/*.php'
           SEPARATOR: ','
@@ -179,7 +179,7 @@ jobs:
         run: echo "RUNNING=1" >> $GITHUB_ENV
       - uses: actions/checkout@v2
       - uses: technote-space/get-git-comment-action@v1
-      - uses: technote-space/get-diff-action@v5
+      - uses: technote-space/get-diff-action@v6
         with:
           PATTERNS: resources/**/*.+(js|ts|vue|snap)
           FILES: |
@@ -247,7 +247,7 @@ jobs:
         run: echo "RUNNING=1" >> $GITHUB_ENV
       - uses: actions/checkout@v2
       - uses: technote-space/get-git-comment-action@v1
-      - uses: technote-space/get-diff-action@v5
+      - uses: technote-space/get-diff-action@v6
         with:
           PATTERNS: '**/*.php'
           FILES: composer.lock
@@ -325,7 +325,7 @@ jobs:
         run: echo "RUNNING=1" >> $GITHUB_ENV
       - uses: actions/checkout@v2
       - uses: technote-space/get-git-comment-action@v1
-      - uses: technote-space/get-diff-action@v5
+      - uses: technote-space/get-diff-action@v6
         with:
           PATTERNS: '**/*.php'
           FILES: composer.lock

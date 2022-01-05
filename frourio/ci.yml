@@ -21,7 +21,7 @@ jobs:
       - name: Set running flag
         run: echo "RUNNING=1" >> $GITHUB_ENV
       - uses: technote-space/get-git-comment-action@v1
-      - uses: technote-space/get-diff-action@v5
+      - uses: technote-space/get-diff-action@v6
         with:
           PATTERNS: apps/**/*.+(js|ts|jsx|tsx)
           FILES: |
@@ -54,7 +54,7 @@ jobs:
       - name: Set running flag
         run: echo "RUNNING=1" >> $GITHUB_ENV
       - uses: technote-space/get-git-comment-action@v1
-      - uses: technote-space/get-diff-action@v5
+      - uses: technote-space/get-diff-action@v6
         with:
           PATTERNS: apps/**/*.+(js|ts|jsx|tsx)
           FILES: |
@@ -85,7 +85,7 @@ jobs:
       - name: Set running flag
         run: echo "RUNNING=1" >> $GITHUB_ENV
       - uses: technote-space/get-git-comment-action@v1
-      - uses: technote-space/get-diff-action@v5
+      - uses: technote-space/get-diff-action@v6
         with:
           FILES: yarn.lock
         if: "! contains(env.COMMIT_MESSAGE, '[skip ci]') && ! contains(env.COMMIT_MESSAGE, '[ci skip]')"
@@ -118,7 +118,7 @@ jobs:
       - name: Set running flag
         run: echo "RUNNING=1" >> $GITHUB_ENV
       - uses: technote-space/get-git-comment-action@v1
-      - uses: technote-space/get-diff-action@v5
+      - uses: technote-space/get-diff-action@v6
         with:
           PATTERNS: apps/**/*.+(js|ts|jsx|tsx|snap)
           FILES: |
