@@ -92,6 +92,7 @@ jobs:
             jest.config.ts
             jest.global.setup.ts
             jest.setup.ts
+            vite.config.ts
         if: "! contains(env.COMMIT_MESSAGE, '[skip ci]') && ! contains(env.COMMIT_MESSAGE, '[ci skip]')"
       - name: Set running flag
         run: echo "RUNNING=" >> $GITHUB_ENV
