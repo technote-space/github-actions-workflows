@@ -16,7 +16,7 @@ jobs:
     steps:
       - name: Set running flag
         run: echo "RUNNING=1" >> $GITHUB_ENV
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - uses: technote-space/get-git-comment-action@v1
       - uses: technote-space/get-diff-action@v6
         with:
@@ -52,7 +52,7 @@ jobs:
     steps:
       - name: Set running flag
         run: echo "RUNNING=1" >> $GITHUB_ENV
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - uses: technote-space/get-git-comment-action@v1
       - uses: technote-space/get-diff-action@v6
         with:
@@ -90,7 +90,7 @@ jobs:
     steps:
       - name: Set running flag
         run: echo "RUNNING=1" >> $GITHUB_ENV
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - uses: technote-space/get-git-comment-action@v1
       - uses: technote-space/get-diff-action@v6
         with:
@@ -133,7 +133,7 @@ jobs:
     steps:
       - name: Set running flag
         run: echo "RUNNING=1" >> $GITHUB_ENV
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - uses: technote-space/get-git-comment-action@v1
       - uses: technote-space/get-diff-action@v6
         with:
@@ -177,7 +177,7 @@ jobs:
     steps:
       - name: Set running flag
         run: echo "RUNNING=1" >> $GITHUB_ENV
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - uses: technote-space/get-git-comment-action@v1
       - uses: technote-space/get-diff-action@v6
         with:
@@ -245,7 +245,7 @@ jobs:
     steps:
       - name: Set running flag
         run: echo "RUNNING=1" >> $GITHUB_ENV
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - uses: technote-space/get-git-comment-action@v1
       - uses: technote-space/get-diff-action@v6
         with:
@@ -323,7 +323,7 @@ jobs:
     steps:
       - name: Set running flag
         run: echo "RUNNING=1" >> $GITHUB_ENV
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - uses: technote-space/get-git-comment-action@v1
       - uses: technote-space/get-diff-action@v6
         with:
@@ -391,7 +391,7 @@ jobs:
     steps:
       - name: Set running flag
         run: echo "RUNNING=1" >> $GITHUB_ENV
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           persist-credentials: false
       - name: Set running flag
