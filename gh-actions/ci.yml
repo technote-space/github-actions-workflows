@@ -121,7 +121,7 @@ jobs:
           CONFIG_FILENAME: workflow-settings.json, workflow-details.json
           IGNORE_WARNING: 'true'
       - name: Release GitHub Actions
-        uses: technote-space/release-github-actions@v7
+        uses: technote-space/release-github-actions@v8
         with:
           OUTPUT_BUILD_INFO_FILENAME: build.json
           TEST_TAG_PREFIX: test/
